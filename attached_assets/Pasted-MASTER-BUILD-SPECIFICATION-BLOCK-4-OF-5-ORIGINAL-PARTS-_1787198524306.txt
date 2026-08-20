@@ -1,0 +1,383 @@
+MASTER BUILD SPECIFICATION — BLOCK 4 OF 5
+ORIGINAL PARTS 31–40
+
+============================================================
+PART 31 — GREEN / DOUBLE GREEN
+============================================================
+
+GREEN requires:
+
+complete independent P1/P2 audit
+minimum effective independent evidence families
+Matrix-removal survival
+reasonable strongest-family-removal survival
+complete Dangerous Underdog Audit
+no multiple high-quality opponent pathways
+no unresolved critical contradiction
+sufficient critical family coverage
+fresh critical data
+
+Matrix-derived evidence cannot satisfy independent minimum.
+
+DOUBLE GREEN requires every Green condition plus stricter active-audit requirements:
+
+larger independent-family count
+stronger stress-test survival
+stronger removal stability
+minimal dangerous-underdog ceiling
+high-quality critical coverage
+
+Calibration alone cannot create Double Green.
+
+Market alone cannot create Double Green.
+
+Matrix alone cannot create Double Green.
+
+============================================================
+PART 32 — YELLOW / RED
+============================================================
+
+Audit YELLOW may result from:
+
+meaningful conflict
+thin sample
+weak separation
+current/historical conflict
+meaningful opponent pathway
+removal instability
+incomplete noncritical evidence
+other active audit rules
+
+RED/PASS may result from:
+
+multiple independent contradictions
+near coin flip
+dangerous opponent survives
+critical evidence problems
+Matrix favorite failing independent removal
+severe instability
+active audit vetoes
+
+RED does not require winner flip.
+
+PASS is valid.
+
+Never force a selection merely because tennis has two players.
+
+============================================================
+PART 33 — DETERMINISTIC COMPLETION
+============================================================
+
+Every match displays:
+
+Metrics X/TOTAL
+P1 Metric Treatment X/TOTAL
+P2 Metric Treatment X/TOTAL
+Verification X/TOTAL
+Disagreement X/TOTAL
+Underdog Pathways X/TOTAL
+Stress Tests X/TOTAL
+Critical Sources X/TOTAL
+Evidence Families X/TOTAL
+Reconstructions X/TOTAL
+Calibration COMPLETE/INCOMPLETE
+Matrix Firewall VALID/VIOLATED
+
+Application code computes:
+
+AUDIT_COMPLETE=TRUE/FALSE
+
+AI cannot override.
+
+Only when TRUE may UI display:
+
+AUDIT COMPLETE — NO REQUIRED STEPS MISSING
+
+Only when TRUE may UI display:
+
+NO SHORTCUTS
+
+Clicking status opens execution proof.
+
+============================================================
+PART 34 — BLOCKING REASON CODES
+============================================================
+
+Every incomplete/blocking state must have machine-readable reasons.
+
+Examples:
+
+SURFACE_CONFLICT
+PLAYER_ID_UNRESOLVED
+MATCH_IDENTITY_UNRESOLVED
+VERIFICATION_RULE_UNMAPPED
+DISAGREEMENT_RULE_UNMAPPED
+METRIC_UNRESOLVED
+CRITICAL_SOURCE_STALE
+CRITICAL_SOURCE_CONFLICT
+MATRIX_FIREWALL_VIOLATED
+PLAYER_2_DATA_MISSING
+DOCUMENT_PARSE_INCOMPLETE
+RECONSTRUCTION_INPUTS_MISSING
+FIRST_SERVE_TIME_UNRESOLVED
+SOURCE_OUTAGE
+DUPLICATE_MATCH_CONFLICT
+
+Support multiple reasons.
+
+Display human-readable explanations.
+
+============================================================
+PART 35 — MASTER RANKED BOARD
+============================================================
+
+Generate ONE combined ranking.
+
+PRIMARY SORT:
+
+1 DOUBLE GREEN
+2 GREEN
+3 YELLOW
+4 RED/PASS
+5 INCOMPLETE
+
+SECONDARY SORT within group:
+
+CURRENT GLOBAL CALIBRATION VERIFIED WIN RATE
+highest to lowest.
+
+NOT Matrix WP.
+
+Columns:
+
+Rank
+Final Selection
+Opponent/Match
+Tournament
+Surface
+Matrix Pick
+Matrix WP
+Calibration Version
+Calibration Bucket
+Verified Win Rate
+Independent Winner
+Independent Range
+Calibrated Range
+Effective Independent Evidence Count
+Critical Evidence Coverage
+Strongest Opponent Pathway
+Dangerous Underdog Status
+Matrix-Removal Result
+Strongest-Family-Removal Result
+Verification Status
+Disagreement Status
+Final Audit Color
+Action
+Completion %
+
+============================================================
+PART 36 — COLOR CODING / PDF
+============================================================
+
+Calibration colors and Audit colors are separate.
+
+Calibration:
+
+Orange <=55
+Tan 56–64
+Purple 65–69
+Blue 70–74
+Pink 75–79
+Brown 80–84
+Indigo 85–89
+Gold 90+
+
+Separate Final Audit Color:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED
+
+Generate downloadable Master Audit PDF:
+
+white background
+dark navy headers
+professional compact tables
+calibration legend
+calibration-colored rows/portions
+separate audit-color cell
+one combined ranked board
+continuation pages
+
+Never classify Green merely because calibration bucket historically performs well.
+
+============================================================
+PART 37 — PDF VALIDATION
+============================================================
+
+Store:
+
+pdf_template_version
+
+PDF records:
+
+report timestamp
+research lock
+summary version
+Verification version
+Disagreement version
+Metrics version
+Calibration version
+source snapshot version
+PDF template version
+
+Validate automatically:
+
+every canonical match appears exactly once
+no duplicate rows
+all matches accounted for
+calibration colors match bucket
+audit color separate
+primary ranking correct
+secondary ranking by Verified Win Rate
+header counts equal rows
+total match reconciliation succeeds
+
+Integrity chain:
+
+UPLOADED MATCHES
+→ CANONICAL MATCHES
+→ ACCOUNTED/RANKED MATCHES
+
+Every difference needs explicit reason.
+
+============================================================
+PART 38 — PDF DECISION TRACE
+============================================================
+
+For every match include:
+
+independent winner
+independent range
+strongest independent family #1
+#2
+#3
+strongest opposing pathway
+Dangerous Underdog result
+Matrix-removal result
+strongest-family-removal result
+unresolved contradictions
+calibration bucket
+Verified Win Rate
+final audit color
+action
+
+If report requested while matches unresolved:
+
+completed matches still appear.
+
+Blocked match:
+
+INCOMPLETE — [SPECIFIC REASON]
+
+Support:
+
+PROVISIONAL REPORT
+
+OFFICIAL COMPLETE REPORT
+
+Do not fabricate unresolved calculations.
+
+============================================================
+PART 39 — EXECUTION LOG / REPRODUCIBILITY
+============================================================
+
+Every match stores immutable execution log:
+
+timestamp
+stage
+rule
+player
+input
+source
+output
+status
+missing data
+reconstruction
+Matrix visibility
+rule version
+formula version
+
+Create AUDIT PROOF button.
+
+Show:
+
+what ran
+what did not
+unavailable data
+reconstructed data
+sources
+timestamps
+rule versions
+formula versions
+P1 coverage
+P2 coverage
+Matrix firewall proof
+
+Historical audits must be reproducible from:
+
+source snapshots
+raw values
+normalized values
+formulas
+rules
+documents
+calibration version
+research lock
+execution state
+final decision
+
+============================================================
+PART 40 — PERMISSIONS / BACKUPS
+============================================================
+
+Separate user/admin permissions.
+
+Admin actions include:
+
+replace audit documents
+modify calibration history
+change grading policies
+blacklist sources
+change source reliability
+override rule mapping
+override identity
+override surface
+manually override classification
+
+Manual overrides never erase computed result.
+
+Preserve:
+
+system_value
+manual_override
+changed_by
+changed_at
+reason
+
+Provide backup/export for:
+
+rules
+source definitions
+calibration ledger
+audit history
+raw parsed summaries
+source snapshots
+reconstruction formulas
+reports
+
+Do not depend on a single unrecoverable database.
+
+END BLOCK 4 OF 5.
+Wait for BLOCK 5.

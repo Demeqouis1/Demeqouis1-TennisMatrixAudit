@@ -1,0 +1,2498 @@
+BUILD: TENNIS MATRIX INDEPENDENT VERIFICATION & AUDIT SYSTEM
+
+TARGET:
+A production-grade full-stack application built in Replit with Git-backed source control.
+
+This system is an AUDIT ENGINE.
+
+It is NOT a chatbot that writes an analysis and then claims the analysis was completed.
+
+The application must prove execution through persisted state.
+
+============================================================
+0. NON-NEGOTIABLE DESIGN PHILOSOPHY
+============================================================
+
+CORE RULE 1:
+THE MATRIX MAY BE COMPARED TO THE AUDIT.
+THE MATRIX MAY NOT DETERMINE THE AUDIT.
+
+CORE RULE 2:
+PLAYER 1 AND PLAYER 2 MUST ALWAYS BE EVALUATED SYMMETRICALLY.
+
+CORE RULE 3:
+NO EXECUTION RECORD = NO COMPLETION.
+
+CORE RULE 4:
+AI may perform research, extraction, interpretation, reconstruction, and evidence summarization, but AI MAY NOT decide whether an audit is complete.
+
+Completion must be determined by deterministic application logic.
+
+The system must:
+
+1. Accept Tennis Matrix match-summary PDFs.
+2. Parse every matchup contained in those PDFs.
+3. Research Player 1 AND Player 2 independently using current web data.
+4. Execute my complete Verification Metrics framework.
+5. Execute my complete Verification Audit.
+6. Execute my complete Disagreement / Trap Audit.
+7. Execute my complete Dangerous Underdog Audit.
+8. Execute all required stress/removal tests.
+9. Reconstruct metrics when direct data does not exist and reconstruction is permitted.
+10. Compare the independent audit to the Matrix only AFTER the independent conclusion is committed.
+11. Apply my evolving 183 Final Record calibration.
+12. Run the Final Combination Gate.
+13. Assign DOUBLE GREEN / GREEN / YELLOW / RED-PASS / INCOMPLETE.
+14. Produce one combined ranked board.
+15. Generate a downloadable PDF matching my supplied Master Audit format.
+16. Monitor match results.
+17. Grade completed matches.
+18. Automatically update the calibration ledger and Verified Win Rates.
+19. Preserve every historical audit, source snapshot, calibration version, rule version, formula version, and generated report.
+20. Maintain separate learning for Matrix calibration and final audit-color performance.
+
+============================================================
+1. ENGINEERING / REPOSITORY REQUIREMENTS
+============================================================
+
+Build a real production application with clear separation between:
+
+frontend
+backend/API
+database
+audit engine
+PDF ingestion
+source collection
+background workers/jobs
+reconstruction engine
+calibration engine
+result grader
+PDF generator
+
+Use sensible repository structure such as:
+
+/apps
+/packages
+/db
+/migrations
+/docs
+/config
+/rules
+/templates
+/tests
+/scripts
+/source-adapters
+/reconstruction
+/audit-engine
+/pdf-generator
+
+Create documentation:
+
+README.md
+ARCHITECTURE.md
+AUDIT_ENGINE.md
+CALIBRATION.md
+SOURCE_GOVERNANCE.md
+SECURITY.md
+TESTING.md
+DEPLOYMENT.md
+DATA_MODEL.md
+
+Never hard-code secrets.
+
+Use environment variables.
+
+Provide .env.example.
+
+Never commit:
+API keys
+passwords
+private credentials
+production secrets
+
+Use database migrations.
+
+Create automated checks for:
+
+lint
+type checking
+unit tests
+integration tests
+database/schema tests
+audit invariant tests
+Matrix firewall tests
+calibration tests
+PDF validation tests
+
+Critical invariant failures must fail deployment.
+
+Do not hide important deterministic audit logic inside LLM prompts.
+
+============================================================
+2. REQUIRED MASTER WORKFLOW
+============================================================
+
+Every match must move through:
+
+SUMMARY PDF INGESTION
+→ MATCH IDENTITY VERIFICATION
+→ PRE-MATCH RESEARCH LOCK
+→ CURRENT WEB DATA COLLECTION
+→ P1 VS P2 FULL METRICS
+→ RECONSTRUCTION OF PERMITTED MISSING METRICS
+→ INDEPENDENT EVIDENCE CONCLUSION
+→ VERIFICATION AUDIT
+→ DISAGREEMENT / TRAP AUDIT
+→ DANGEROUS UNDERDOG AUDIT
+→ STRESS / COMPONENT-REMOVAL TESTS
+→ MATRIX REVEAL AND COMPARISON
+→ CURRENT CALIBRATION APPLICATION
+→ FINAL COMBINATION GATE
+→ DOUBLE GREEN / GREEN / YELLOW / RED-PASS / INCOMPLETE
+→ MASTER RANKED BOARD
+→ PDF REPORT
+→ RESULT MONITORING
+→ RESULT GRADING
+→ CALIBRATION LEDGER UPDATE
+→ NEW CALIBRATION VERSION
+→ POST-RESULT LEARNING / AUTOPSY
+
+No required stage may be silently skipped.
+
+Every stage/rule/metric/pathway/test must have persisted status:
+
+NOT_STARTED
+RUNNING
+COMPLETE
+BLOCKED
+UNAVAILABLE
+FAILED
+REQUIRES_HUMAN_REVIEW
+
+The AI does NOT determine COMPLETE.
+
+============================================================
+3. SUMMARY PDF INGESTION
+============================================================
+
+Support:
+
+single PDF
+multiple PDFs
+combined multi-match PDF
+revised PDF
+replacement PDF
+
+Read the ENTIRE PDF.
+
+Identify every distinct matchup.
+
+Extract where available:
+
+Player 1
+Player 2
+tournament
+event level
+round
+date
+surface
+indoor/outdoor
+best-of
+Matrix predicted winner
+Matrix WP
+Monte Carlo result/range
+DQ
+upset risk
+agreement
+closeness
+Elo
+surface Elo
+recent form
+serve data
+return data
+market
+General Model
+Specialist Model
+H2H
+workload/fatigue
+style
+all other fields
+
+Preserve:
+
+original PDF
+file hash
+PDF version
+page number
+raw extracted text
+structured extracted value
+parser confidence
+processing method
+
+Every page must be accounted for.
+
+============================================================
+4. SCANNED / IMAGE PDF HANDLING
+============================================================
+
+Use this extraction order:
+
+1. Native PDF text extraction.
+2. Validate extracted text quality.
+3. If text is missing, malformed, corrupted, or image-only, use page-image/vision extraction.
+4. Compare extracted content against expected structures.
+5. Record extraction method per page.
+
+NEVER treat an image-only page as blank.
+
+Every page must become one of:
+
+TEXT_PARSED
+VISION_PARSED
+PARTIAL
+REQUIRES_REVIEW
+FAILED
+
+Create a PDF Parsing Review screen.
+
+Allow manual corrections before the audit begins.
+
+Use:
+
+DIRECT
+RECONSTRUCTED
+PARTIAL
+UNAVAILABLE
+EXCLUDED
+
+Never silently guess unreadable information.
+
+Store separately:
+
+SYSTEM_VALUE
+MANUAL_OVERRIDE
+changed_by
+changed_at
+reason
+
+Manual overrides never erase computed/original values.
+
+============================================================
+5. MATCH IDENTITY / DUPLICATES
+============================================================
+
+Detect duplicate physical matches.
+
+One match appearing in multiple PDFs becomes:
+
+MATCH
+→ SUMMARY_VERSION_1
+→ SUMMARY_VERSION_2
+→ SUMMARY_VERSION_3
+
+Allow active summary selection.
+
+Verify:
+
+P1 canonical identity
+P2 canonical identity
+tournament
+edition/year
+event level
+draw
+round
+scheduled date
+surface
+indoor/outdoor
+best-of
+match status
+
+Handle:
+
+accents
+transliterations
+initials
+abbreviations
+alternate spellings
+duplicate surnames
+
+Never merge players merely because names look similar.
+
+Create canonical match key from fields such as:
+
+event_id
+draw_id
+round
+player_1_id
+player_2_id
+scheduled_date
+
+Statuses:
+
+MATCH_IDENTITY_VERIFIED
+MATCH_IDENTITY_CONFLICT
+
+Never grade same physical match twice.
+
+============================================================
+6. SURFACE VERIFICATION
+============================================================
+
+Independently verify:
+
+surface
+event edition
+indoor/outdoor
+venue where relevant
+
+If Matrix summary and authoritative source disagree:
+
+SURFACE_CONFLICT
+
+Do not run disputed surface-dependent calculations until resolved.
+
+============================================================
+7. MATCH-LEVEL BLOCKING — NEVER GLOBAL
+============================================================
+
+THIS RULE IS CRITICAL.
+
+A blocking condition applies ONLY to the affected match and ONLY to calculations dependent upon unresolved information.
+
+NEVER stop, cancel, or pause the entire slate because one match has a problem.
+
+Example:
+
+If Match 17 of 60 has unresolved surface:
+
+Matches 1–16 continue.
+Matches 18–60 continue.
+
+Match 17 continues all calculations unrelated to surface.
+
+Only its dependent calculations remain blocked.
+
+Its Final Combination Gate remains locked until resolved.
+
+Use separate statuses:
+
+BATCH:
+
+RUNNING
+COMPLETE
+COMPLETE_WITH_UNRESOLVED_MATCHES
+
+MATCH:
+
+RUNNING
+PARTIALLY_BLOCKED
+READY_FOR_FINAL_GATE
+COMPLETE
+INCOMPLETE
+
+CALCULATION:
+
+NOT_STARTED
+RUNNING
+COMPLETE
+BLOCKED
+UNAVAILABLE
+FAILED
+
+Critical logic:
+
+MATCH_BLOCKED != BATCH_BLOCKED
+
+CALCULATION_BLOCKED != MATCH_PROCESSING_STOPPED
+
+Block dependencies, not workflows.
+
+When a dependency resolves:
+
+1. update source record
+2. recalculate dependent metrics
+3. rerun affected Verification rules
+4. rerun affected Disagreement rules
+5. rerun affected underdog pathways
+6. rerun affected stress tests
+7. recalculate independent conclusion if necessary
+8. compare Matrix if appropriate
+9. reapply calibration
+10. rerun Final Gate
+
+Do not restart entire slate.
+
+============================================================
+8. RULE / KNOWLEDGE BASE
+============================================================
+
+Create editable master documents:
+
+1. VERIFICATION AUDIT
+2. DISAGREEMENT / TRAP AUDIT
+3. VERIFICATION METRICS
+4. FINAL RECORD / CALIBRATION
+
+Admin can:
+
+open
+inspect
+edit
+upload replacement
+download
+activate
+restore
+compare
+inspect version history
+see audits using each version
+
+Replacement document MUST be read in its entirety.
+
+Generate:
+
+DOCUMENT_PARSE_COMPLETENESS_REPORT
+
+Include:
+
+pages detected
+sections detected
+headings detected
+expected rules
+parsed rules
+unmapped rules
+ambiguous rules
+unparsed text
+parser confidence
+
+If expected=60 and parsed=59:
+
+DOCUMENT_ACTIVATION_BLOCKED.
+
+If natural language cannot safely become executable:
+
+REQUIRES_HUMAN_RULE_MAPPING.
+
+Never silently omit a rule.
+
+============================================================
+9. RULE VERSIONING / INVALIDATION
+============================================================
+
+When replacing:
+
+Verification Audit
+Disagreement Audit
+Metrics
+Underdog rules
+Stress tests
+Calibration logic
+Reconstruction formulas
+
+system must:
+
+1. parse complete replacement
+2. compare old/new
+3. show additions
+4. show removals
+5. show modifications
+6. validate implementation
+7. activate only after validation
+8. identify affected audits
+9. mark affected current audits:
+
+STALE_RULE_VERSION_CHANGED
+
+or
+
+INVALIDATED_RERUN_REQUIRED
+
+Preserve historical audits unchanged.
+
+Support:
+
+rerun current slate
+rerun selected matches
+rerun unfinished matches
+rerun affected matches
+
+Every rerun processes BOTH players.
+
+Formula/rule versions remain immutable for historical runs.
+
+============================================================
+10. SOURCE GOVERNANCE
+============================================================
+
+Create:
+
+ADMIN → SOURCES → SOURCE GOVERNANCE
+
+Store:
+
+source_id
+source_name
+domain
+category
+priority
+reliability_score
+supported_data
+refresh_schedule
+error_history
+last_fetch
+last_validation
+active
+approved
+blacklisted
+blacklist_reason
+
+Allow:
+
+add
+remove
+disable
+blacklist
+prioritize
+change reliability
+assign metrics
+inspect history
+
+Default hierarchy:
+
+TIER 1 OFFICIAL:
+identity
+tournament
+surface
+draw
+ranking
+official status/result
+retirement
+walkover
+withdrawal
+
+TIER 2 SPECIALIST TENNIS:
+Elo
+surface Elo
+serve
+return
+form
+H2H
+opponent history
+workload
+strength of schedule
+
+TIER 3 MARKET:
+opening odds
+current odds
+consensus
+implied probability
+movement
+
+TIER 4 NEWS / AVAILABILITY:
+injury
+illness
+travel
+withdrawal
+physical limitations
+scheduling
+
+Lower-quality sources must not silently override authoritative sources.
+
+============================================================
+11. MULTI-SOURCE REQUIREMENT
+============================================================
+
+For critical facts seek at least TWO independent sources when practical.
+
+Store:
+
+SOURCE_A
+SOURCE_B
+SOURCE_C when available
+
+plus:
+
+agreement
+disagreement
+timestamps
+reliability
+normalized value
+selection reason
+
+If only one credible source exists:
+
+SINGLE_SOURCE_DEPENDENCY
+
+When credible sources disagree:
+
+SOURCE_CONFLICT
+
+Possible resolutions:
+
+RESOLVED_AUTHORITATIVE_SOURCE
+RESOLVED_SOURCE_CONSENSUS
+RESOLVED_FRESHEST_RELIABLE_SOURCE
+UNRESOLVED
+
+Never silently select one.
+
+============================================================
+12. SOURCE OUTAGE / RATE-LIMIT HANDLING
+============================================================
+
+Implement:
+
+retries
+exponential backoff
+rate-limit handling
+source health monitoring
+quotas
+fallback sources
+failure logging
+
+Temporary source outage does NOT automatically make metric permanently unavailable.
+
+Record:
+
+PREFERRED_SOURCE_FAILED
+FALLBACK_SOURCE_USED
+
+If no reliable fallback exists:
+
+DATA_UNAVAILABLE
+
+Only retrieve data using permitted APIs, licensed feeds, compliant retrieval, approved scraping where allowed, or manual entry.
+
+Do not architect around prohibited or brittle scraping.
+
+============================================================
+13. DATA FRESHNESS / PRE-MATCH LOCK
+============================================================
+
+Configurable freshness windows.
+
+Examples:
+
+rankings=daily
+draw/surface=daily or change-driven
+results=frequent
+market=frequent
+injury/news=frequent
+weather=frequent near start
+
+Expired critical evidence:
+
+AUDIT_STALE_REFRESH_REQUIRED
+
+Store:
+
+tournament_local_timezone
+scheduled_local_time
+scheduled_utc
+actual_first_serve_local
+actual_first_serve_utc
+research_lock_at
+result_time
+
+Handle DST/timezones correctly.
+
+No evidence obtained after actual first serve may justify original pre-match audit.
+
+Exclude:
+
+live score
+first-set data
+in-play odds
+live statistics
+live win probability
+during-match discoveries
+
+Label:
+
+POST_START_DATA_EXCLUDED_FROM_PREMATCH_AUDIT
+
+Freeze immutable pre-match snapshot.
+
+Later analysis becomes AUDIT_RUN_2 etc.
+
+Never rewrite original snapshot.
+
+============================================================
+14. FULL P1 VS P2 METRICS
+============================================================
+
+Import EVERY metric from active Metrics document.
+
+Store per applicable metric:
+
+metric_id
+name
+category
+P1 value
+P2 value
+differential
+surface-adjusted differential
+recent differential
+opponent-adjusted differential
+sample
+freshness
+reliability
+sources
+independence/correlation
+direction
+treatment
+
+Every applicable metric evaluates BOTH players.
+
+HARD INVARIANT:
+
+MATCH CANNOT COMPLETE UNTIL P1 AND P2 BOTH RECEIVE REQUIRED TREATMENT FOR EVERY APPLICABLE METRIC.
+
+Never evaluate only Matrix winner/favorite/P1/P2.
+
+UNAVAILABLE must not automatically penalize either player unless active rules explicitly define a missing-data penalty.
+
+============================================================
+15. RESEARCH COMPLETENESS BY EVIDENCE FAMILY
+============================================================
+
+Do not only report raw metric count.
+
+Also track critical evidence-family coverage.
+
+Examples:
+
+present strength
+surface strength
+recent form
+serve
+return
+opponent quality
+ranking/Elo
+availability/health
+workload
+market
+recent ceiling
+H2H/rematch
+matchup/style
+conditions
+
+Hundreds of unavailable supplemental metrics must not disguise a missing critical family.
+
+Store:
+
+critical_family_required
+critical_family_covered
+coverage_quality
+blocking status
+
+============================================================
+16. RECONSTRUCTION ENGINE
+============================================================
+
+Reconstruct only when permitted.
+
+Every reconstruction stores:
+
+formula
+formula_version
+inputs
+sources
+timestamps
+assumptions
+sample
+reliability
+output
+
+Possible reconstructions:
+
+opponent-adjusted form
+strength of schedule
+recent Elo movement
+hold/break estimates
+matchup hold/break
+dominance measures
+calibrated probability ranges
+
+Reconstruct BOTH players where applicable.
+
+Never label reconstructed value DIRECT.
+
+If inputs insufficient:
+
+UNAVAILABLE
+
+Never invent values.
+
+============================================================
+17. INDEPENDENT PROBABILITY CONSTRUCTION
+============================================================
+
+Independent probability construction MUST be explicit and versioned.
+
+Store exact method generating:
+
+independent winner
+independent probability/range
+uncertainty
+
+AI may not simply write:
+
+72–78%
+
+without calculation provenance.
+
+Every final numeric output must be traceable:
+
+Matrix WP
+independent range
+calibrated range
+historical Verified Win Rate
+audit confidence
+
+Trace:
+
+inputs
+formula/model
+version
+timestamp
+source provenance
+
+============================================================
+18. MATRIX FIREWALL
+============================================================
+
+Create isolated branches.
+
+BRANCH A — MATRIX:
+
+predicted winner
+WP
+MC
+Matrix Elo
+General Model
+Specialist Model
+agreement
+upset-risk interpretation
+Matrix market
+all Matrix-derived directional fields
+
+BRANCH B — INDEPENDENT:
+
+NO Matrix winner-direction information before commitment.
+
+Branch B determines independently:
+
+winner
+probability range
+uncertainty
+case for P1
+case for P2
+
+Persist independent decision.
+
+Store:
+
+independent_decision_committed_at
+
+Only afterward reveal Matrix.
+
+Store:
+
+matrix_revealed_at
+
+Require:
+
+matrix_revealed_at > independent_decision_committed_at
+
+Violation:
+
+MATRIX_FIREWALL_VIOLATED
+
+Affected audit becomes compromised/invalid.
+
+Matrix is evaluation benchmark only.
+
+============================================================
+19. MATRIX CANNOT QUALIFY GREEN
+============================================================
+
+The following CANNOT satisfy independent-evidence requirements:
+
+Matrix WP
+Matrix MC
+Matrix Elo
+Matrix General Model
+Matrix Specialist Model
+Matrix agreement
+Matrix market
+derivatives of Matrix outputs
+
+They may only be used after independent determination for:
+
+comparison
+disagreement analysis
+diagnostics
+calibration
+
+Maintain:
+
+RAW_SIGNAL_COUNT
+
+EFFECTIVE_INDEPENDENT_EVIDENCE_COUNT
+
+Only effective independent evidence can qualify Green.
+
+Collapse correlated evidence.
+
+Multiple transformations of same data are not multiple independent confirmations.
+
+============================================================
+20. VERIFICATION AUDIT
+============================================================
+
+Execute EVERY active Verification Audit rule against BOTH players.
+
+Store:
+
+rule_id
+rule_name
+P1 finding
+P2 finding
+PASS/WARN/FAIL
+severity
+sources
+reliability
+decision_effect
+execution_timestamp
+rule_version
+
+Display:
+
+VERIFICATION_RULES_EXECUTED = X/TOTAL
+
+If X != TOTAL:
+
+VERIFICATION_AUDIT_INCOMPLETE
+
+Mandatory missing rule locks Final Gate.
+
+Generated AI prose is never proof of execution.
+
+============================================================
+21. DISAGREEMENT / TRAP AUDIT
+============================================================
+
+Execute COMPLETE Disagreement/Trap Audit.
+
+Preserve exact structure, including A–U if active document uses it.
+
+Per family store:
+
+P1 risk
+P2 risk
+supporting evidence
+opposing evidence
+contradiction severity
+reliability
+recency
+independence
+decision effect
+
+Display:
+
+DISAGREEMENT_RULES_EXECUTED = X/TOTAL
+
+No required family may be silently skipped.
+
+============================================================
+22. DANGEROUS UNDERDOG AUDIT
+============================================================
+
+Mandatory.
+
+Underdog = lower-confidence side from INDEPENDENT AUDIT.
+
+Not automatically Matrix underdog.
+
+Evaluate every active pathway and at minimum:
+
+serve-through
+return-pressure
+second-serve exploitation
+short-rally
+long-rally
+movement/physical
+slow-start
+deciding-set
+tiebreak
+fatigue
+style mismatch
+market-information
+favorite-collapse
+surface-transition
+recent-improvement/ranking-lag
+
+Classify:
+
+WEAK
+REALISTIC
+STRONG
+UNRESOLVED
+
+Explicitly store:
+
+HOW DOES P1 WIN?
+HOW DOES P2 WIN?
+WHICH PATHWAYS ARE DEMONSTRATED/REPEATABLE?
+
+No Green while this stage is incomplete.
+
+============================================================
+23. STRESS / REMOVAL TESTS
+============================================================
+
+Execute every active stress test.
+
+Baseline:
+
+1 Remove Matrix headline
+2 Remove all Matrix-derived outputs
+3 Remove strongest independent favorite family
+4 Remove market
+5 Upweight recent/current form
+6 Upweight same-surface evidence
+7 Upweight opponent-specific evidence
+8 Conservative probability floor
+9 Dangerous-underdog ceiling
+10 Physical/conditions shock
+
+Store:
+
+winner_before
+winner_after
+range_before
+range_after
+
+Classify:
+
+STABLE
+MOSTLY_STABLE
+UNSTABLE
+FAILS
+
+If Matrix removal changes independent winner:
+
+GREEN_LOCKED
+
+If candidate survives only because Matrix information remains:
+
+GREEN_LOCKED
+
+============================================================
+24. CALIBRATION BASELINE
+============================================================
+
+Initialize Final Record:
+
+ORANGE
+Matrix WP <=55%
+1/3
+33.3%
+
+TAN
+56–64%
+13/23
+56.5%
+
+PURPLE
+65–69%
+15/19
+78.9%
+
+BLUE
+70–74%
+20/27
+74.1%
+
+PINK
+75–79%
+19/26
+73.1%
+
+BROWN
+80–84%
+9/12
+75.0%
+
+INDIGO / DARK PURPLE
+85–89%
+6/8
+75.0%
+
+GOLD
+90%+
+2/2
+100.0%
+SMALL SAMPLE
+
+Color legend:
+
+🟧 <=55 ORANGE
+🟫 56–64 TAN
+🟪 65–69 PURPLE
+🟦 70–74 BLUE
+🩷 75–79 PINK
+🟤 80–84 BROWN
+🟪 85–89 INDIGO/DARK PURPLE
+🟨 90%+ GOLD
+
+Verified Win Rates update dynamically.
+
+Do not permanently hard-code starting percentages.
+
+Historical Verified Win Rate is NOT current player's independent probability.
+
+============================================================
+25. CALIBRATION APPLICATION
+============================================================
+
+Calibration occurs AFTER independent audit.
+
+May adjust:
+
+confidence
+calibrated range
+uncertainty
+
+May NOT determine independent evidence direction.
+
+Verification/Trap vetoes remain active regardless of bucket strength.
+
+GLOBAL calibration remains primary.
+
+============================================================
+26. CONTEXTUAL CALIBRATION
+============================================================
+
+Store contextual dimensions:
+
+surface
+indoor/outdoor
+ATP/WTA
+event level
+Challenger/Tour
+qualifying/main draw
+best-of
+ranking-gap
+Elo-gap
+Matrix bucket
+MC band
+closeness
+market structure
+DQ
+
+Contextual calibration is supplemental.
+
+Never silently replace global calibration.
+
+Always display:
+
+wins
+graded sample
+Verified Win Rate
+sample warning
+
+2/2=100% must show SMALL SAMPLE.
+
+============================================================
+27. AUTOMATIC RESULT MONITORING
+============================================================
+
+Monitor every audited match until reliable official status exists.
+
+Retrieve:
+
+actual winner
+final score
+whether match started
+retirement status
+walkover
+withdrawal
+cancellation
+default
+abandoned/suspended status
+completion timestamp
+
+Verify canonical identity before grading.
+
+Statuses:
+
+COMPLETED_NORMALLY
+IN_MATCH_RETIREMENT
+PRE_MATCH_RETIREMENT_WITHDRAWAL
+WALKOVER
+CANCELLATION
+DEFAULT
+ABANDONED
+SUSPENDED
+NO_CONTEST
+UNKNOWN_UNVERIFIED
+
+============================================================
+28. IN-MATCH RETIREMENT GRADING
+============================================================
+
+If match started and player later retires:
+
+GRADE AS NORMAL COMPLETED MATCH.
+
+Official winning/advancing player = winner.
+
+Prediction result:
+
+WIN or LOSS.
+
+Count in:
+
+calibration numerator
+calibration denominator
+Verified Win Rate
+
+Preserve:
+
+RESULT_TYPE=IN_MATCH_RETIREMENT
+
+For primary calibration:
+
+IN-MATCH RETIREMENT = REGULAR GRADED MATCH.
+
+============================================================
+29. PRE-MATCH RETIREMENT / WALKOVER / CANCELLATION
+============================================================
+
+If player withdraws/retires BEFORE start:
+
+NO WIN/LOSS grading.
+
+If WALKOVER:
+
+NO WIN/LOSS grading.
+
+If CANCELLATION:
+
+NO WIN/LOSS grading.
+
+Instead create:
+
+YELLOW_NON_GRADED
+
+Reason codes:
+
+YELLOW_PREMATCH_WITHDRAWAL
+YELLOW_WALKOVER
+YELLOW_CANCELLATION
+
+Keep visible in master history.
+
+Do NOT enter calibration wins/losses/numerator/denominator.
+
+============================================================
+30. MASTER SEQUENCE VS GRADED SAMPLE
+============================================================
+
+Maintain:
+
+MASTER_RECORD_SEQUENCE_COUNT
+
+GRADED_CALIBRATION_SAMPLE_COUNT
+
+Yellow non-graded increases master sequence but not graded sample.
+
+Example:
+
+Master starts 183.
+
+Next match is pre-match walkover.
+
+Master becomes 184.
+
+Calibration denominators unchanged.
+
+If Blue was:
+
+20/27 = 74.1%
+
+it remains:
+
+20/27 = 74.1%
+
+Do not confuse:
+
+FINAL_AUDIT_COLOR
+
+with:
+
+RESULT_GRADING_STATUS
+
+Example:
+
+final_audit_color=GREEN
+result_grading_status=YELLOW_WALKOVER
+
+is valid.
+
+============================================================
+31. THREE-WAY RESULT TRACKING
+============================================================
+
+Separately grade:
+
+1 MATRIX RESULT
+2 INDEPENDENT AUDIT RESULT
+3 FINAL SELECTION RESULT
+
+Store:
+
+matrix_prediction_result =
+WIN / LOSS / NON_GRADED
+
+independent_audit_result =
+WIN / LOSS / PASS / NON_GRADED
+
+final_selection_result =
+WIN / LOSS / PASS / NON_GRADED
+
+If Matrix picks P1,
+Independent picks P2,
+P2 wins:
+
+Matrix LOSS
+Independent WIN
+
+If Matrix picks P1,
+Independent switches to P2,
+P1 wins:
+
+Matrix WIN
+Independent LOSS
+
+This identifies whether audit corrected or introduced error.
+
+Never blur these results.
+
+============================================================
+32. AUDIT-COLOR LEARNING LEDGER
+============================================================
+
+Maintain SECOND ledger separate from Matrix WP calibration.
+
+Track:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED/PASS
+
+Store:
+
+final audit color
+final selection
+actual result
+eligible/non-graded
+win/loss
+surface
+event
+independent range
+Matrix bucket
+underdog status
+removal stability
+
+Calculate:
+
+Double Green hit rate
+Green hit rate
+Yellow hit rate
+false-Green frequency
+successful-downgrade frequency
+Green vs Yellow performance
+
+NEVER mix this ledger into Final Record Matrix WP calibration denominator.
+
+============================================================
+33. POST-RESULT AUTOPSY
+============================================================
+
+Every eligible GREEN/DOUBLE GREEN loss triggers automatic post-result autopsy.
+
+Use PRE-MATCH evidence only when judging what should have been detected.
+
+Possible failure reasons:
+
+rapid riser missed
+stale rating
+surface mispricing
+market contradiction
+opponent ceiling
+injury uncertainty
+matchup/style collision
+workload
+ranking lag
+bad reconstruction
+correlated evidence overcount
+missing critical evidence
+underdog pathway underestimated
+probability construction error
+
+Also log successful Yellow/Red downgrades.
+
+Post-result learning NEVER rewrites original pre-match audit.
+
+No future leakage.
+
+============================================================
+34. AUTOMATIC CALIBRATION UPDATE
+============================================================
+
+When result arrives:
+
+1 verify canonical identity
+2 verify original pre-match prediction
+3 retrieve original Matrix WP
+4 identify original bucket
+5 verify whether match started
+6 verify result type
+7 apply grading policy
+8 check duplicate grading
+9 create immutable ledger entry
+
+NORMAL:
+WIN/LOSS + bucket update
+
+IN-MATCH RETIREMENT:
+WIN/LOSS + bucket update
+
+PRE-MATCH WITHDRAWAL:
+YELLOW NON-GRADED; no bucket change
+
+WALKOVER:
+YELLOW NON-GRADED; no bucket change
+
+CANCELLATION:
+YELLOW NON-GRADED; no bucket change
+
+Then:
+
+increment master sequence
+recalculate Verified Win Rate where applicable
+create new calibration version
+preserve old version
+
+One physical match can produce at most one calibration result in a lineage.
+
+Duplicate:
+
+DUPLICATE_CALIBRATION_ENTRY_BLOCKED
+
+============================================================
+35. CALIBRATION HISTORY
+============================================================
+
+Create Calibration History screen.
+
+Show:
+
+master sequence #
+match
+tournament
+date
+surface
+Matrix predicted winner
+Matrix WP
+bucket
+actual winner/status
+WIN
+LOSS
+YELLOW NON-GRADED
+result type
+counted in bucket YES/NO
+calibration version before
+calibration version after
+
+Allow admin correction.
+
+Never erase original.
+
+Preserve:
+
+SYSTEM_VALUE
+MANUAL_OVERRIDE
+changed_by
+changed_at
+reason
+
+============================================================
+36. FINAL COMBINATION GATE
+============================================================
+
+Before final color verify:
+
+identity complete
+critical dependencies resolved
+P1 metrics complete
+P2 metrics complete
+reconstructions completed/appropriately unavailable
+Verification complete
+Disagreement complete
+Dangerous Underdog complete
+stress/removal complete
+independent conclusion committed
+Matrix firewall valid
+Matrix comparison complete
+current calibration applied
+critical sources fresh
+critical evidence-family coverage sufficient
+
+Then:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED/PASS
+INCOMPLETE
+
+Missing mandatory work = INCOMPLETE.
+
+Never fabricate calculations to issue color.
+
+============================================================
+37. GREEN REQUIREMENTS
+============================================================
+
+GREEN requires:
+
+complete independent P1/P2 audit
+minimum effective independent evidence families
+Matrix-removal survival
+reasonable strongest-family-removal survival
+complete Dangerous Underdog Audit
+no multiple high-quality opponent pathways
+no unresolved critical contradiction
+sufficient critical family coverage
+fresh critical data
+
+Matrix-derived evidence cannot satisfy independent minimum.
+
+============================================================
+38. DOUBLE GREEN REQUIREMENTS
+============================================================
+
+DOUBLE GREEN requires every Green condition plus stricter active-audit requirements:
+
+larger independent-family count
+stronger stress-test survival
+stronger removal stability
+minimal dangerous-underdog ceiling
+high-quality critical coverage
+
+Calibration alone cannot create Double Green.
+
+Market alone cannot create Double Green.
+
+Matrix alone cannot create Double Green.
+
+============================================================
+39. YELLOW / RED-PASS
+============================================================
+
+Audit YELLOW may result from:
+
+meaningful conflict
+thin sample
+weak separation
+current/historical conflict
+meaningful opponent pathway
+removal instability
+incomplete noncritical evidence
+other active audit rules
+
+RED/PASS may result from:
+
+multiple independent contradictions
+near coin flip
+dangerous opponent survives
+critical evidence problems
+Matrix favorite failing independent removal
+severe instability
+active audit vetoes
+
+RED does not require winner flip.
+
+PASS is valid.
+
+Never force selection merely because tennis has two players.
+
+============================================================
+40. DETERMINISTIC COMPLETION
+============================================================
+
+Every match displays:
+
+Metrics X/TOTAL
+P1 Metric Treatment X/TOTAL
+P2 Metric Treatment X/TOTAL
+Verification X/TOTAL
+Disagreement X/TOTAL
+Underdog Pathways X/TOTAL
+Stress Tests X/TOTAL
+Critical Sources X/TOTAL
+Evidence Families X/TOTAL
+Reconstructions X/TOTAL
+Calibration COMPLETE/INCOMPLETE
+Matrix Firewall VALID/VIOLATED
+
+Application code computes:
+
+AUDIT_COMPLETE=TRUE/FALSE
+
+AI cannot override.
+
+Only when TRUE may UI display:
+
+AUDIT COMPLETE — NO REQUIRED STEPS MISSING
+
+Only when TRUE may UI display:
+
+NO SHORTCUTS
+
+Clicking status opens execution proof.
+
+============================================================
+41. BLOCKING REASON CODES
+============================================================
+
+Every incomplete/blocking state must have machine-readable reasons.
+
+Examples:
+
+SURFACE_CONFLICT
+PLAYER_ID_UNRESOLVED
+MATCH_IDENTITY_UNRESOLVED
+VERIFICATION_RULE_UNMAPPED
+DISAGREEMENT_RULE_UNMAPPED
+METRIC_UNRESOLVED
+CRITICAL_SOURCE_STALE
+CRITICAL_SOURCE_CONFLICT
+MATRIX_FIREWALL_VIOLATED
+PLAYER_2_DATA_MISSING
+DOCUMENT_PARSE_INCOMPLETE
+RECONSTRUCTION_INPUTS_MISSING
+FIRST_SERVE_TIME_UNRESOLVED
+SOURCE_OUTAGE
+DUPLICATE_MATCH_CONFLICT
+
+Support multiple reasons.
+
+Display human-readable explanations.
+
+============================================================
+42. MASTER RANKED BOARD
+============================================================
+
+Generate ONE combined ranking.
+
+PRIMARY SORT:
+
+1 DOUBLE GREEN
+2 GREEN
+3 YELLOW
+4 RED/PASS
+5 INCOMPLETE
+
+SECONDARY SORT within group:
+
+CURRENT GLOBAL CALIBRATION VERIFIED WIN RATE
+highest to lowest.
+
+NOT Matrix WP.
+
+Columns:
+
+Rank
+Final Selection
+Opponent/Match
+Tournament
+Surface
+Matrix Pick
+Matrix WP
+Calibration Version
+Calibration Bucket
+Verified Win Rate
+Independent Winner
+Independent Range
+Calibrated Range
+Effective Independent Evidence Count
+Critical Evidence Coverage
+Strongest Opponent Pathway
+Dangerous Underdog Status
+Matrix-Removal Result
+Strongest-Family-Removal Result
+Verification Status
+Disagreement Status
+Final Audit Color
+Action
+Completion %
+
+============================================================
+43. COLOR CODING
+============================================================
+
+Calibration colors and Audit colors are separate.
+
+Calibration:
+
+Orange <=55
+Tan 56–64
+Purple 65–69
+Blue 70–74
+Pink 75–79
+Brown 80–84
+Indigo 85–89
+Gold 90+
+
+Separate Final Audit Color:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED
+
+Never classify Green merely because calibration bucket historically performs well.
+
+============================================================
+44. PDF GENERATION
+============================================================
+
+Generate downloadable Master Audit PDF:
+
+white background
+dark navy headers
+professional compact tables
+calibration legend
+calibration-colored rows/portions
+separate audit-color cell
+one combined ranked board
+continuation pages
+
+Store:
+
+pdf_template_version
+
+PDF records:
+
+report timestamp
+research lock
+summary version
+Verification version
+Disagreement version
+Metrics version
+Calibration version
+source snapshot version
+PDF template version
+
+============================================================
+45. PDF VALIDATION / BATCH INTEGRITY
+============================================================
+
+Automatically validate:
+
+every canonical match appears exactly once
+no duplicate rows
+all matches accounted for
+calibration colors match bucket
+audit color separate
+primary ranking correct
+secondary ranking by Verified Win Rate
+header counts equal rows
+total match reconciliation succeeds
+
+Integrity chain:
+
+UPLOADED MATCHES
+→ CANONICAL MATCHES
+→ ACCOUNTED/RANKED MATCHES
+
+Every difference needs explicit reason.
+
+If row color mismatches active bucket:
+
+PDF_VALIDATION_FAILED
+
+If header says 60 matches but only 59 accounted:
+
+PDF_VALIDATION_FAILED
+
+============================================================
+46. PDF DECISION TRACE
+============================================================
+
+For every match include:
+
+independent winner
+independent range
+strongest independent family #1
+#2
+#3
+strongest opposing pathway
+Dangerous Underdog result
+Matrix-removal result
+strongest-family-removal result
+unresolved contradictions
+calibration bucket
+Verified Win Rate
+final audit color
+action
+
+If report requested while matches unresolved:
+
+completed matches still appear.
+
+Blocked match:
+
+INCOMPLETE — [SPECIFIC REASON]
+
+Support:
+
+PROVISIONAL REPORT
+
+OFFICIAL COMPLETE REPORT
+
+Do not fabricate unresolved calculations.
+
+============================================================
+47. EXECUTION LOG / AUDIT PROOF
+============================================================
+
+Every match stores immutable execution log:
+
+timestamp
+stage
+rule
+player
+input
+source
+output
+status
+missing data
+reconstruction
+Matrix visibility
+rule version
+formula version
+
+Create AUDIT PROOF button.
+
+Show:
+
+what ran
+what did not
+unavailable data
+reconstructed data
+sources
+timestamps
+rule versions
+formula versions
+P1 coverage
+P2 coverage
+Matrix firewall proof
+
+Historical audits must be reproducible from:
+
+source snapshots
+raw values
+normalized values
+formulas
+rules
+documents
+calibration version
+research lock
+execution state
+final decision
+
+============================================================
+48. PERMISSIONS / MANUAL OVERRIDES
+============================================================
+
+Separate user/admin permissions.
+
+Admin actions include:
+
+replace audit documents
+modify calibration history
+change grading policies
+blacklist sources
+change source reliability
+override rule mapping
+override identity
+override surface
+manually override classification
+
+Manual overrides never erase computed result.
+
+Preserve:
+
+system_value
+manual_override
+changed_by
+changed_at
+reason
+
+============================================================
+49. BACKUPS / EXPORTS
+============================================================
+
+Provide backup/export for:
+
+rules
+source definitions
+calibration ledger
+audit history
+raw parsed summaries
+source snapshots
+reconstruction formulas
+generated reports
+
+System must not depend on one unrecoverable database instance.
+
+============================================================
+50. ERROR DISCLOSURE
+============================================================
+
+If system later discovers:
+
+skipped metric
+skipped rule
+wrong player
+wrong match
+wrong surface
+Matrix leakage
+source corruption
+duplicate grading
+bad reconstruction
+post-start leakage
+incorrect formula
+
+mark audit:
+
+COMPROMISED
+
+Do not silently repair original.
+
+Preserve compromised historical run.
+
+Create corrected new audit run.
+
+Record:
+
+what failed
+when discovered
+affected outputs
+replacement audit run
+
+============================================================
+51. DATABASE ENTITIES
+============================================================
+
+Include at minimum:
+
+users
+roles
+players
+tournaments
+matches
+match_identity_records
+
+summary_uploads
+summary_versions
+summary_pages
+parsed_summary_fields
+
+metric_definitions
+metric_versions
+metric_results
+evidence_families
+
+source_definitions
+source_snapshots
+source_failures
+source_conflicts
+
+reconstruction_definitions
+reconstruction_versions
+reconstruction_results
+
+verification_documents
+verification_rule_versions
+verification_results
+
+disagreement_documents
+disagreement_rule_versions
+disagreement_results
+
+underdog_pathways
+underdog_results
+
+stress_test_definitions
+stress_results
+
+calibration_versions
+calibration_buckets
+calibration_ledger
+calibration_result_entries
+
+audit_color_learning_ledger
+post_result_autopsies
+
+final_decisions
+audit_runs
+execution_logs
+
+generated_reports
+pdf_template_versions
+
+manual_overrides
+document_versions
+
+============================================================
+52. REQUIRED UI
+============================================================
+
+Build:
+
+Dashboard
+Upload Summaries
+PDF Parse Review
+Active Slate
+Match Audit Workspace
+P1 vs P2 Metrics
+Evidence Family Coverage
+Verification Audit
+Disagreement / Trap Audit
+Dangerous Underdog
+Stress / Removal Tests
+Independent Probability Construction
+Matrix Comparison
+Sources
+Source Health
+Source Conflicts
+Reconstructions
+Calibration
+Calibration History
+Audit-Color Performance
+Post-Result Autopsies
+Rules / Knowledge Base
+Document Version History
+Audit Execution Logs
+Audit Proof
+Master Ranked Board
+PDF Reports
+Admin / Permissions
+Backups / Exports
+
+============================================================
+53. AUTOMATED TESTS
+============================================================
+
+TEST:
+one match has unresolved surface.
+
+EXPECTED:
+only dependent calculations and affected match Final Gate block.
+Slate continues.
+
+TEST:
+Matrix exposed before independent commitment.
+
+EXPECTED:
+MATRIX_FIREWALL_VIOLATED; audit invalid.
+
+TEST:
+P1 complete but mandatory P2 metric missing.
+
+EXPECTED:
+AUDIT_INCOMPLETE.
+
+TEST:
+Verification document has 60 rules but parser maps 59.
+
+EXPECTED:
+DOCUMENT_ACTIVATION_BLOCKED.
+
+TEST:
+same physical match uploaded twice.
+
+EXPECTED:
+one canonical match; multiple summary versions.
+
+TEST:
+same result graded twice.
+
+EXPECTED:
+DUPLICATE_CALIBRATION_ENTRY_BLOCKED.
+
+TEST:
+Matrix says Grass; authoritative event data says Hard.
+
+EXPECTED:
+SURFACE_CONFLICT; dependent calculations blocked.
+
+TEST:
+post-first-serve information enters pre-match dataset.
+
+EXPECTED:
+POST_START_DATA_EXCLUDED.
+
+TEST:
+Matrix-derived signals appear sufficient for Green.
+
+EXPECTED:
+effective independent evidence does not increase.
+
+TEST:
+candidate fails Matrix-removal.
+
+EXPECTED:
+GREEN_LOCKED.
+
+TEST:
+audit document replaced.
+
+EXPECTED:
+affected current audits STALE/INVALIDATED.
+
+TEST:
+match begins and player retires.
+
+EXPECTED:
+normal WIN/LOSS grading; calibration updated.
+
+TEST:
+player withdraws before match.
+
+EXPECTED:
+YELLOW_NON_GRADED; master sequence advances; denominator unchanged.
+
+TEST:
+walkover.
+
+EXPECTED:
+YELLOW_NON_GRADED.
+
+TEST:
+cancellation.
+
+EXPECTED:
+YELLOW_NON_GRADED.
+
+TEST:
+90%+ bucket remains 2/2.
+
+EXPECTED:
+100% with SMALL_SAMPLE warning.
+
+TEST:
+scanned PDF page has no embedded text.
+
+EXPECTED:
+vision extraction; page not treated as blank.
+
+TEST:
+Matrix=P1, independent=P2, P2 wins.
+
+EXPECTED:
+Matrix LOSS.
+Independent WIN.
+Final Selection graded independently.
+
+TEST:
+Matrix=P1, independent=P2, P1 wins.
+
+EXPECTED:
+Matrix WIN.
+Independent LOSS.
+System identifies audit introduced error.
+
+TEST:
+Green loses.
+
+EXPECTED:
+automatic false-Green autopsy using only eligible pre-match evidence.
+
+TEST:
+Yellow/Red correctly avoids losing Matrix favorite.
+
+EXPECTED:
+successful downgrade logged.
+
+TEST:
+final board generated.
+
+EXPECTED:
+primary sort Audit Color.
+secondary sort Verified Win Rate.
+
+TEST:
+row calibration color wrong.
+
+EXPECTED:
+PDF validation failure.
+
+TEST:
+header says 60 matches but only 59 accounted rows.
+
+EXPECTED:
+report validation failure.
+
+TEST:
+metric UNAVAILABLE without explicit penalty rule.
+
+EXPECTED:
+neither player automatically penalized.
+
+============================================================
+54. CI / RELEASE GATES
+============================================================
+
+Use automated CI/release checks.
+
+Required:
+
+lint
+typecheck
+unit tests
+integration tests
+database migration tests
+Matrix firewall tests
+P1/P2 symmetry tests
+rule completeness tests
+calibration tests
+duplicate grading tests
+timezone/research-lock tests
+PDF validation tests
+completion-state tests
+
+Deployment/release fails if:
+
+critical invariant fails
+migration fails
+rule completeness breaks
+Matrix firewall breaks
+calibration integrity breaks
+PDF ranking validation fails
+
+Do not rely solely on manual testing.
+
+============================================================
+55. FINAL SYSTEM INVARIANTS
+============================================================
+
+RULE 1:
+THE MATRIX MAY BE COMPARED TO THE AUDIT.
+THE MATRIX MAY NOT DETERMINE THE AUDIT.
+
+RULE 2:
+NO P1 ANALYSIS WITHOUT P2.
+
+RULE 3:
+NO P2 ANALYSIS WITHOUT P1.
+
+RULE 4:
+NO MISSING METRIC MAY BE INVENTED.
+
+RULE 5:
+NO REQUIRED RULE MAY BE SILENTLY OMITTED.
+
+RULE 6:
+NO NEW RULE DOCUMENT ACTIVATES UNTIL COMPLETE PARSING VERIFIED.
+
+RULE 7:
+NO GREEN/DOUBLE GREEN MAY USE MATRIX-DERIVED SIGNALS TO SATISFY INDEPENDENT EVIDENCE MINIMUM.
+
+RULE 8:
+NO GREEN IF MATRIX REMOVAL FAILS.
+
+RULE 9:
+NO GREEN IF DANGEROUS UNDERDOG AUDIT INCOMPLETE.
+
+RULE 10:
+NO FINALIZATION WITH UNRESOLVED CRITICAL DEPENDENCY.
+
+RULE 11:
+CRITICAL DEPENDENCY BLOCKS AFFECTED MATCH/CALCULATION, NEVER WHOLE SLATE.
+
+RULE 12:
+NO POST-START DATA CONTAMINATES PRE-MATCH AUDIT.
+
+RULE 13:
+NO PHYSICAL MATCH GRADED TWICE.
+
+RULE 14:
+IN-MATCH RETIREMENT = NORMAL GRADED MATCH.
+
+RULE 15:
+PRE-MATCH WITHDRAWAL/WALKOVER/CANCELLATION = YELLOW NON-GRADED.
+
+RULE 16:
+YELLOW NON-GRADED ADVANCES MASTER SEQUENCE BUT DOES NOT ENTER CALIBRATION NUMERATOR/DENOMINATOR.
+
+RULE 17:
+RULE CHANGES INVALIDATE AFFECTED CURRENT AUDITS UNTIL RERUN.
+
+RULE 18:
+NO COMPLETE OR NO SHORTCUTS LABEL MAY COME FROM AI CLAIMS.
+
+RULE 19:
+EVERY FINAL DECISION MUST BE REPRODUCIBLE.
+
+RULE 20:
+NO EXECUTION RECORD = NO COMPLETION.
+
+RULE 21:
+UNAVAILABLE DATA DOES NOT AUTOMATICALLY PENALIZE EITHER PLAYER.
+
+RULE 22:
+HISTORICAL VERIFIED WIN RATE MUST NEVER BE MISLABELED AS CURRENT MATCH WIN PROBABILITY.
+
+RULE 23:
+MATRIX RESULT, INDEPENDENT AUDIT RESULT, FINAL SELECTION RESULT MUST BE GRADED SEPARATELY.
+
+RULE 24:
+AUDIT-COLOR PERFORMANCE REMAINS SEPARATE FROM MATRIX WP CALIBRATION.
+
+RULE 25:
+POST-RESULT LEARNING MAY NOT RETROACTIVELY ALTER PRE-MATCH EVIDENCE.
+
+RULE 26:
+EVERY PROBABILITY/RANGE REQUIRES CALCULATION PROVENANCE.
+
+RULE 27:
+EVERY BLOCKED STATE REQUIRES MACHINE-READABLE REASON.
+
+RULE 28:
+EVERY PAGE OF EVERY INPUT PDF MUST BE ACCOUNTED FOR.
+
+============================================================
+56. FINAL BUILD INSTRUCTION TO REPLIT
+============================================================
+
+Treat this entire prompt as ONE authoritative specification.
+
+Do not summarize requirements away.
+
+Do not silently simplify requirements.
+
+Do not replace deterministic safeguards with LLM prompt instructions where code can enforce them.
+
+BEFORE IMPLEMENTATION:
+
+1. Restate proposed architecture.
+2. Identify major services/modules.
+3. Produce database schema.
+4. Produce individual-match state machine.
+5. Produce Matrix firewall architecture.
+6. Produce deterministic completion algorithm.
+7. Produce calibration/versioning architecture.
+8. Produce source-governance architecture.
+9. Produce PDF ingestion architecture.
+10. Produce background-job architecture.
+11. Produce testing strategy.
+12. Identify anything that cannot be implemented exactly BEFORE modifying requirement.
+
+Then create an implementation plan.
+
+Recommended milestones:
+
+M1 Repository / DB / Auth
+M2 PDF ingestion / identity
+M3 Sources / research
+M4 P1/P2 metrics
+M5 Verification engine
+M6 Disagreement/Trap engine
+M7 Dangerous Underdog
+M8 Stress/removal
+M9 Matrix firewall/comparison
+M10 Calibration/result grading
+M11 Ranked board/PDF
+M12 Audit proof/reproducibility
+M13 Post-result learning
+M14 Full invariant tests
+M15 Production hardening
+
+IMPORTANT:
+
+Do not spend the first implementation phase building a generic pretty dashboard.
+
+BUILD THE INTEGRITY ARCHITECTURE FIRST.
+
+The system must technically enforce these rules wherever practical.
+
+AI MAY:
+
+read PDFs
+parse documents
+research
+extract data
+reconstruct permitted metrics
+summarize evidence
+explain findings
+
+DETERMINISTIC APPLICATION LOGIC MUST CONTROL:
+
+match identity
+P1/P2 completeness
+rule counts
+metric counts
+evidence-family completeness
+source conflicts
+document completeness
+Matrix isolation
+Green eligibility
+result grading
+calibration updates
+duplicate prevention
+ranking
+report completion
+
+FINAL CONTRACT:
+
+THE SYSTEM MUST PROVE THE WORK WAS DONE.
+IT MUST NEVER MERELY SAY IT WAS DONE.
+
+NO EXECUTION RECORD = NO COMPLETION.
+
+NO VERIFIED P1 AND P2 = NO COMPLETION.
+
+NO COMPLETE METRIC SWEEP = NO COMPLETION.
+
+NO COMPLETE VERIFICATION AUDIT = NO COMPLETION.
+
+NO COMPLETE DISAGREEMENT/TRAP AUDIT = NO COMPLETION.
+
+NO COMPLETE DANGEROUS UNDERDOG AUDIT = NO GREEN.
+
+NO MATRIX-REMOVAL SURVIVAL = NO GREEN.
+
+NO VERIFIED SOURCE SNAPSHOT = NO FINALIZATION.
+
+NO VALID RESULT STATUS = NO CALIBRATION GRADING.
+
+NO COMPLETE DOCUMENT PARSE = NO NEW ACTIVE RULE VERSION.
+
+BLOCK DEPENDENCIES, NOT THE ENTIRE SLATE.
+
+THE MATRIX MAY BE COMPARED TO THE AUDIT.
+THE MATRIX MAY NOT DETERMINE THE AUDIT.
+
+THE SYSTEM MUST PROVE THE WORK WAS DONE.
+
+BEGIN BY PRESENTING THE ARCHITECTURE AND IMPLEMENTATION PLAN.
+
+DO NOT CLAIM ANY COMPONENT EXISTS UNTIL IT HAS ACTUALLY BEEN IMPLEMENTED AND TESTED.

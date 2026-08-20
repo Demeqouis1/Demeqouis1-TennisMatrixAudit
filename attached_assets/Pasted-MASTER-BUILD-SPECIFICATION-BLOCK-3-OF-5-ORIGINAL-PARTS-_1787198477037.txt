@@ -1,0 +1,404 @@
+MASTER BUILD SPECIFICATION — BLOCK 3 OF 5
+ORIGINAL PARTS 21–30
+CONTINUE SAME BUILD.
+
+============================================================
+PART 21 — CALIBRATION APPLICATION
+============================================================
+
+Calibration occurs AFTER independent audit.
+
+May adjust:
+
+confidence
+calibrated range
+uncertainty
+
+May NOT determine independent evidence direction.
+
+Verification/Trap vetoes remain active regardless of bucket strength.
+
+GLOBAL calibration remains primary.
+
+Store contextual dimensions separately:
+
+surface
+indoor/outdoor
+ATP/WTA
+event level
+Challenger/Tour
+qualifying/main draw
+best-of
+ranking-gap
+Elo-gap
+Matrix bucket
+MC band
+closeness
+market structure
+DQ
+
+Contextual analysis is supplemental.
+
+Never silently replace global calibration.
+
+Always display:
+
+wins
+graded sample
+Verified Win Rate
+sample warning
+
+2/2=100% must show SMALL SAMPLE.
+
+============================================================
+PART 22 — RESULT MONITORING
+============================================================
+
+Monitor every audited match until reliable official status exists.
+
+Retrieve:
+
+actual winner
+final score
+whether match started
+retirement status
+walkover
+withdrawal
+cancellation
+default
+abandoned/suspended status
+completion timestamp
+
+Verify canonical identity before grading.
+
+Statuses:
+
+COMPLETED_NORMALLY
+IN_MATCH_RETIREMENT
+PRE_MATCH_RETIREMENT_WITHDRAWAL
+WALKOVER
+CANCELLATION
+DEFAULT
+ABANDONED
+SUSPENDED
+NO_CONTEST
+UNKNOWN_UNVERIFIED
+
+============================================================
+PART 23 — RETIREMENT / WALKOVER GRADING
+============================================================
+
+IN_MATCH_RETIREMENT:
+
+If match started and player later retires:
+
+GRADE AS NORMAL COMPLETED MATCH.
+
+Official winning/advancing player = winner.
+
+Prediction result:
+
+WIN or LOSS.
+
+Count in calibration numerator/denominator and Verified Win Rate.
+
+Preserve:
+
+RESULT_TYPE=IN_MATCH_RETIREMENT.
+
+PRE-MATCH retirement/withdrawal:
+
+NO WIN/LOSS grading.
+
+WALKOVER:
+
+NO WIN/LOSS grading.
+
+CANCELLATION:
+
+NO WIN/LOSS grading.
+
+Instead create:
+
+YELLOW_NON_GRADED
+
+Reason codes:
+
+YELLOW_PREMATCH_WITHDRAWAL
+YELLOW_WALKOVER
+YELLOW_CANCELLATION
+
+Keep visible in master history.
+
+Do NOT enter calibration wins/losses/numerator/denominator.
+
+============================================================
+PART 24 — SEQUENCE VS GRADED SAMPLE
+============================================================
+
+Maintain:
+
+MASTER_RECORD_SEQUENCE_COUNT
+
+GRADED_CALIBRATION_SAMPLE_COUNT
+
+Yellow non-graded increases master sequence but not graded sample.
+
+Example:
+
+Master record starts 183.
+
+Next match is pre-match walkover.
+
+Master record becomes 184.
+
+No calibration denominator changes.
+
+If Blue was:
+
+20/27 = 74.1%
+
+it remains:
+
+20/27 = 74.1%.
+
+Do not confuse:
+
+FINAL_AUDIT_COLOR
+
+with:
+
+RESULT_GRADING_STATUS
+
+Example:
+
+final_audit_color=GREEN
+result_grading_status=YELLOW_WALKOVER
+
+is valid.
+
+============================================================
+PART 25 — THREE-WAY RESULT TRACKING
+============================================================
+
+Separately grade:
+
+1 MATRIX RESULT
+2 INDEPENDENT AUDIT RESULT
+3 FINAL SELECTION RESULT
+
+Store:
+
+matrix_prediction_result =
+WIN / LOSS / NON_GRADED
+
+independent_audit_result =
+WIN / LOSS / PASS / NON_GRADED
+
+final_selection_result =
+WIN / LOSS / PASS / NON_GRADED
+
+If Matrix picks P1,
+Independent Audit picks P2,
+P2 wins:
+
+record Matrix LOSS and Independent WIN.
+
+If Matrix picks P1,
+Independent Audit changes to P2,
+P1 wins:
+
+record Matrix WIN and Independent LOSS.
+
+This identifies whether independent audit corrected or introduced error.
+
+Never blur these results.
+
+============================================================
+PART 26 — AUDIT-COLOR LEARNING LEDGER
+============================================================
+
+Maintain SECOND ledger separate from Matrix WP calibration.
+
+Track:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED/PASS
+
+Store:
+
+final audit color
+final selection
+actual result
+eligible/non-graded
+win/loss
+surface
+event
+independent range
+Matrix bucket
+underdog status
+removal stability
+
+Calculate:
+
+Double Green hit rate
+Green hit rate
+Yellow hit rate
+false-Green frequency
+successful-downgrade frequency
+Green vs Yellow performance
+
+NEVER mix this ledger into Final Record Matrix WP calibration denominator.
+
+============================================================
+PART 27 — POST-RESULT AUTOPSY
+============================================================
+
+Every eligible GREEN/DOUBLE GREEN loss triggers automatic post-result autopsy.
+
+Use PRE-MATCH evidence only when judging what should have been detected.
+
+Possible failure reasons:
+
+rapid riser missed
+stale rating
+surface mispricing
+market contradiction
+opponent ceiling
+injury uncertainty
+matchup/style collision
+workload
+ranking lag
+bad reconstruction
+correlated evidence overcount
+missing critical evidence
+underdog pathway underestimated
+probability construction error
+
+Also log successful Yellow/Red downgrades.
+
+Post-result learning NEVER rewrites original pre-match audit.
+
+No future leakage.
+
+Match score, live stats, or injury discovered during match cannot be claimed as pre-match-known unless public before first serve.
+
+============================================================
+PART 28 — AUTOMATIC CALIBRATION UPDATE
+============================================================
+
+When result arrives:
+
+1 verify canonical identity
+2 verify original pre-match prediction
+3 retrieve original Matrix WP
+4 identify original bucket
+5 verify whether match started
+6 verify result type
+7 apply grading policy
+8 check duplicate grading
+9 create immutable ledger entry
+
+NORMAL:
+WIN/LOSS + bucket update
+
+IN-MATCH RETIREMENT:
+WIN/LOSS + bucket update
+
+PRE-MATCH WITHDRAWAL:
+YELLOW NON-GRADED; no bucket change
+
+WALKOVER:
+YELLOW NON-GRADED; no bucket change
+
+CANCELLATION:
+YELLOW NON-GRADED; no bucket change
+
+Then:
+
+increment master sequence
+recalculate Verified Win Rate where applicable
+create new calibration version
+preserve old version
+
+One physical match can produce at most one calibration result in a lineage.
+
+Duplicate:
+
+DUPLICATE_CALIBRATION_ENTRY_BLOCKED
+
+============================================================
+PART 29 — CALIBRATION HISTORY
+============================================================
+
+Create Calibration History screen.
+
+Show:
+
+master sequence #
+match
+tournament
+date
+surface
+Matrix predicted winner
+Matrix WP
+bucket
+actual winner/status
+WIN
+LOSS
+YELLOW NON-GRADED
+result type
+counted in bucket YES/NO
+calibration version before
+calibration version after
+
+Allow admin correction.
+
+Never erase original.
+
+Preserve:
+
+SYSTEM_VALUE
+MANUAL_OVERRIDE
+changed_by
+changed_at
+reason
+
+============================================================
+PART 30 — FINAL COMBINATION GATE
+============================================================
+
+Before final color verify:
+
+identity complete
+critical dependencies resolved
+P1 metrics complete
+P2 metrics complete
+reconstructions completed/appropriately unavailable
+Verification complete
+Disagreement complete
+Dangerous Underdog complete
+stress/removal complete
+independent conclusion committed
+Matrix firewall valid
+Matrix comparison complete
+current calibration applied
+critical sources fresh
+critical evidence-family coverage sufficient
+
+Then:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED/PASS
+INCOMPLETE
+
+Missing mandatory work = INCOMPLETE.
+
+Never fabricate calculations to issue color.
+
+END BLOCK 3 OF 5.
+Wait for BLOCK 4.

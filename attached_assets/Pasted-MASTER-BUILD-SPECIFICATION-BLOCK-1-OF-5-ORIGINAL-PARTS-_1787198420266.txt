@@ -1,0 +1,539 @@
+MASTER BUILD SPECIFICATION — BLOCK 1 OF 5
+ORIGINAL PARTS 1–10
+DO NOT START IMPLEMENTATION UNTIL BLOCKS 1–5 HAVE ALL BEEN RECEIVED.
+Treat every block as one continuous specification. Do not summarize away, simplify, or silently omit requirements.
+
+============================================================
+PART 1 — PROJECT MANDATE
+============================================================
+
+BUILD:
+TENNIS MATRIX INDEPENDENT VERIFICATION & AUDIT SYSTEM
+
+TARGET:
+Production-grade full-stack application built and maintained in Replit, with a Git-backed repository and version-controlled application code, database migrations, schemas, tests, documentation, rule-engine code, PDF templates, source adapters, reconstruction formulas, and configuration.
+
+THIS IS AN AUDIT ENGINE.
+
+IT IS NOT A CHATBOT THAT WRITES AN ANALYSIS AND THEN CLAIMS THAT THE ANALYSIS WAS COMPLETED.
+
+The application must PROVE execution through persisted state.
+
+CORE RULE 1:
+THE MATRIX MAY BE COMPARED TO THE AUDIT.
+THE MATRIX MAY NOT DETERMINE THE AUDIT.
+
+CORE RULE 2:
+PLAYER 1 AND PLAYER 2 MUST ALWAYS BE EVALUATED SYMMETRICALLY.
+
+CORE RULE 3:
+NO EXECUTION RECORD = NO COMPLETION.
+
+CORE RULE 4:
+AI may perform research, extraction, interpretation, and evidence summarization, but AI MAY NOT decide whether an audit is complete.
+
+Deterministic application logic controls completion.
+
+The system must:
+
+1. Accept Tennis Matrix match-summary PDFs.
+2. Parse every matchup.
+3. Research Player 1 AND Player 2 independently.
+4. Execute the complete Verification Metrics framework.
+5. Execute the complete Verification Audit.
+6. Execute the complete Disagreement / Trap Audit.
+7. Execute the complete Dangerous Underdog Audit.
+8. Execute all stress/removal tests.
+9. Reconstruct permitted missing metrics.
+10. Compare independent audit to Matrix only AFTER independent conclusion is committed.
+11. Apply evolving 183 Final Record calibration.
+12. Run Final Combination Gate.
+13. Assign DOUBLE GREEN / GREEN / YELLOW / RED-PASS / INCOMPLETE.
+14. Produce one combined ranked board.
+15. Generate downloadable Master Audit PDF.
+16. Monitor match results.
+17. Grade completed matches.
+18. Automatically update calibration ledger and Verified Win Rates.
+19. Preserve every historical audit, source snapshot, calibration version, rule version, formula version, and generated report.
+
+============================================================
+PART 2 — ENGINEERING / REPOSITORY REQUIREMENTS
+============================================================
+
+Build a real production application with clear separation between:
+
+frontend
+backend/API
+database
+audit engine
+PDF ingestion
+source collection
+background workers/jobs
+reconstruction engine
+calibration engine
+result grader
+PDF generator
+
+Use sensible repository structure such as:
+
+/apps
+/packages
+/db
+/migrations
+/docs
+/config
+/rules
+/templates
+/tests
+/scripts
+/source-adapters
+/reconstruction
+/audit-engine
+/pdf-generator
+
+Create documentation:
+
+README.md
+ARCHITECTURE.md
+AUDIT_ENGINE.md
+CALIBRATION.md
+SOURCE_GOVERNANCE.md
+SECURITY.md
+TESTING.md
+DEPLOYMENT.md
+DATA_MODEL.md
+
+Never hard-code secrets.
+
+Use environment variables.
+
+Provide .env.example.
+
+Never commit API keys, passwords, private credentials, or production secrets.
+
+Use database migrations.
+
+Create CI checks for:
+
+lint
+type checking
+unit tests
+integration tests
+database/schema tests
+audit invariant tests
+Matrix firewall tests
+calibration tests
+PDF validation tests
+
+Critical invariant failures must fail deployment.
+
+Do not hide important deterministic audit logic inside LLM prompts.
+
+============================================================
+PART 3 — MASTER WORKFLOW
+============================================================
+
+Every match must move through:
+
+SUMMARY PDF INGESTION
+→ MATCH IDENTITY VERIFICATION
+→ PRE-MATCH RESEARCH LOCK
+→ CURRENT WEB DATA COLLECTION
+→ P1 VS P2 FULL METRICS
+→ RECONSTRUCTION OF PERMITTED MISSING METRICS
+→ INDEPENDENT EVIDENCE CONCLUSION
+→ VERIFICATION AUDIT
+→ DISAGREEMENT / TRAP AUDIT
+→ DANGEROUS UNDERDOG AUDIT
+→ STRESS / COMPONENT-REMOVAL TESTS
+→ MATRIX REVEAL AND COMPARISON
+→ CURRENT CALIBRATION APPLICATION
+→ FINAL COMBINATION GATE
+→ DOUBLE GREEN / GREEN / YELLOW / RED-PASS / INCOMPLETE
+→ MASTER RANKED BOARD
+→ PDF REPORT
+→ RESULT MONITORING
+→ RESULT GRADING
+→ CALIBRATION LEDGER UPDATE
+→ NEW CALIBRATION VERSION
+
+No required stage may be silently skipped.
+
+Persist status for every stage/rule/metric/pathway/test:
+
+NOT_STARTED
+RUNNING
+COMPLETE
+BLOCKED
+UNAVAILABLE
+FAILED
+REQUIRES_HUMAN_REVIEW
+
+The AI does NOT determine COMPLETE.
+
+============================================================
+PART 4 — PDF INGESTION
+============================================================
+
+Support:
+
+single PDF
+multiple PDFs
+combined multi-match PDF
+revised PDF
+replacement PDF
+
+Read the ENTIRE PDF.
+
+Identify every distinct matchup.
+
+Extract where available:
+
+Player 1
+Player 2
+tournament
+event level
+round
+date
+surface
+indoor/outdoor
+best-of
+Matrix predicted winner
+Matrix WP
+Monte Carlo result/range
+DQ
+upset risk
+agreement
+closeness
+Elo
+surface Elo
+recent form
+serve data
+return data
+market
+General Model
+Specialist Model
+H2H
+workload/fatigue
+style
+every additional field
+
+Preserve:
+
+original PDF
+file hash
+PDF version
+page number
+extracted text
+extracted value
+parser confidence
+processing method
+
+Every page must be accounted for.
+
+============================================================
+PART 5 — SCANNED PDF / PARSE REVIEW
+============================================================
+
+Extraction order:
+
+1. Native PDF text extraction.
+2. Validate extraction quality.
+3. If missing/corrupted/image-only, perform page-image/vision extraction.
+4. Compare extraction against expected structures.
+5. Record extraction method per page.
+
+NEVER treat image-only page as blank.
+
+Page states:
+
+TEXT_PARSED
+VISION_PARSED
+PARTIAL
+REQUIRES_REVIEW
+FAILED
+
+Create PDF Parsing Review screen.
+
+Allow manual corrections before official audit.
+
+Data treatment:
+
+DIRECT
+RECONSTRUCTED
+PARTIAL
+UNAVAILABLE
+EXCLUDED
+
+Never silently guess unreadable information.
+
+Manual corrections preserve:
+
+SYSTEM_VALUE
+MANUAL_OVERRIDE
+changed_by
+changed_at
+reason
+
+============================================================
+PART 6 — MATCH IDENTITY / DUPLICATES
+============================================================
+
+Detect duplicate physical matches.
+
+One physical match appearing in multiple PDFs becomes:
+
+MATCH
+→ SUMMARY_VERSION_1
+→ SUMMARY_VERSION_2
+→ SUMMARY_VERSION_3
+
+Allow active summary selection.
+
+Verify:
+
+P1 canonical identity
+P2 canonical identity
+tournament
+edition/year
+event level
+draw
+round
+scheduled date
+surface
+indoor/outdoor
+best-of
+match status
+
+Handle:
+
+accents
+transliterations
+initials
+abbreviations
+alternate spellings
+duplicate surnames
+
+Never merge players merely because names resemble one another.
+
+Create canonical match key from fields such as:
+
+event_id
+draw_id
+round
+player_1_id
+player_2_id
+scheduled_date
+
+Statuses:
+
+MATCH_IDENTITY_VERIFIED
+MATCH_IDENTITY_CONFLICT
+
+Never grade same physical match twice.
+
+============================================================
+PART 7 — SURFACE / BLOCKING
+============================================================
+
+Independently verify:
+
+surface
+event edition
+indoor/outdoor
+venue where relevant
+
+If Matrix summary and authoritative source disagree:
+
+SURFACE_CONFLICT
+
+Do not run dependent surface calculations until resolved.
+
+CRITICAL:
+BLOCK ONLY AFFECTED DEPENDENCIES.
+
+Never stop entire slate because one match has a problem.
+
+BATCH:
+
+RUNNING
+COMPLETE
+COMPLETE_WITH_UNRESOLVED_MATCHES
+
+MATCH:
+
+RUNNING
+PARTIALLY_BLOCKED
+READY_FOR_FINAL_GATE
+COMPLETE
+INCOMPLETE
+
+CALCULATION:
+
+NOT_STARTED
+RUNNING
+COMPLETE
+BLOCKED
+UNAVAILABLE
+FAILED
+
+MATCH_BLOCKED != BATCH_BLOCKED
+
+CALCULATION_BLOCKED != MATCH_PROCESSING_STOPPED
+
+Block dependencies, not workflows.
+
+When dependency resolves, rerun only affected downstream calculations/rules/gates as required.
+
+============================================================
+PART 8 — RULE KNOWLEDGE BASE
+============================================================
+
+Create editable master documents:
+
+1. VERIFICATION AUDIT
+2. DISAGREEMENT / TRAP AUDIT
+3. VERIFICATION METRICS
+4. FINAL RECORD / CALIBRATION
+
+Admin can:
+
+open
+inspect
+edit
+upload replacement
+download
+activate
+restore
+compare
+inspect version history
+see audits using version
+
+Replacement document MUST be read in its entirety.
+
+Generate:
+
+DOCUMENT_PARSE_COMPLETENESS_REPORT
+
+Include:
+
+pages
+sections
+headings
+expected rules
+parsed rules
+unmapped rules
+ambiguous rules
+unparsed text
+parser confidence
+
+If expected=60 and parsed=59:
+
+DOCUMENT_ACTIVATION_BLOCKED.
+
+Untranslatable rule:
+
+REQUIRES_HUMAN_RULE_MAPPING.
+
+Never silently omit it.
+
+============================================================
+PART 9 — RULE VERSIONING
+============================================================
+
+When replacing:
+
+Verification Audit
+Disagreement Audit
+Metrics
+Underdog rules
+Stress tests
+Calibration logic
+Reconstruction formulas
+
+system must:
+
+parse complete replacement
+compare old/new
+show additions
+show removals
+show modifications
+validate implementation
+activate only after validation
+identify affected audits
+mark affected current audits:
+
+STALE_RULE_VERSION_CHANGED
+
+or
+
+INVALIDATED_RERUN_REQUIRED
+
+Preserve historical audits unchanged.
+
+Support:
+
+rerun current slate
+rerun selected matches
+rerun unfinished matches
+rerun affected matches
+
+Every rerun processes BOTH players.
+
+Formula/rule versions are immutable for historical runs.
+
+============================================================
+PART 10 — SOURCE GOVERNANCE
+============================================================
+
+Create:
+
+ADMIN → SOURCES → SOURCE GOVERNANCE
+
+Store:
+
+source_id
+source_name
+domain
+category
+priority
+reliability_score
+supported_data
+refresh_schedule
+error_history
+last_fetch
+last_validation
+active
+approved
+blacklisted
+blacklist_reason
+
+Allow:
+
+add
+remove
+disable
+blacklist
+prioritize
+change reliability
+assign metrics
+inspect history
+
+Source tiers:
+
+TIER 1 OFFICIAL:
+identity, tournament, surface, draw, ranking, official status/result, retirement, walkover, withdrawal
+
+TIER 2 SPECIALIST TENNIS:
+Elo, surface Elo, serve, return, form, H2H, opponent history, workload, strength of schedule
+
+TIER 3 MARKET:
+opening odds, current odds, consensus, implied probability, movement
+
+TIER 4 NEWS/AVAILABILITY:
+injury, illness, travel, withdrawal, physical limitations, scheduling
+
+Lower-quality sources must not silently override authoritative sources.
+
+END BLOCK 1 OF 5.
+Wait for BLOCK 2. Do not begin implementation.
