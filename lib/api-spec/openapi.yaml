@@ -1,22 +1,20 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Tennis Matrix Independent Verification and Audit API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: audit
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +22,185 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /audit/summary:
+    get:
+      operationId: getAuditSummary
+      tags: [audit]
+      summary: Get audit dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditSummary"
+  /audit/matches:
+    get:
+      operationId: listAuditMatches
+      tags: [audit]
+      summary: List matches on the current slate
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Match list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuditMatch"
+  /audit/matches/{matchId}:
+    get:
+      operationId: getAuditMatch
+      tags: [audit]
+      summary: Get one match and its execution proof
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Match detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditMatchDetail"
+        "404":
+          description: Match not found
+  /audit/matches/{matchId}/execute:
+    post:
+      operationId: executeAuditMatch
+      tags: [audit]
+      summary: Run the deterministic audit stages for a match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Updated match detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditMatchDetail"
+  /audit/board:
+    get:
+      operationId: getRankedBoard
+      tags: [audit]
+      summary: Get the ranked audit board
+      responses:
+        "200":
+          description: Ranked board
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BoardRow"
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
-
+    AuditSummary:
+      type: object
+      required: [slateName, matches, ready, blocked, complete, greenRate, lastUpdated]
+      properties:
+        slateName: { type: string }
+        matches: { type: number }
+        ready: { type: number }
+        blocked: { type: number }
+        complete: { type: number }
+        greenRate: { type: number }
+        lastUpdated: { type: string }
+    AuditMatch:
+      type: object
+      required: [id, player1, player2, tournament, round, surface, scheduled, status, auditColor, progress, independentWinner, matrixWinner, matrixWp, verifiedWinRate]
+      properties:
+        id: { type: string }
+        player1: { type: string }
+        player2: { type: string }
+        tournament: { type: string }
+        round: { type: string }
+        surface: { type: string }
+        scheduled: { type: string }
+        status: { type: string }
+        auditColor: { type: string }
+        progress: { type: number }
+        independentWinner: { type: string }
+        matrixWinner: { type: string }
+        matrixWp: { type: number }
+        verifiedWinRate: { type: number }
+    AuditMatchDetail:
+      allOf:
+        - $ref: "#/components/schemas/AuditMatch"
+        - type: object
+          required: [evidenceFamilies, executionStages, matrixFirewall, resultTracking, blockers]
+          properties:
+            evidenceFamilies:
+              type: array
+              items: { $ref: "#/components/schemas/EvidenceFamily" }
+            executionStages:
+              type: array
+              items: { $ref: "#/components/schemas/ExecutionStage" }
+            matrixFirewall:
+              $ref: "#/components/schemas/MatrixFirewall"
+            resultTracking:
+              $ref: "#/components/schemas/ResultTracking"
+            blockers:
+              type: array
+              items: { type: string }
+    EvidenceFamily:
+      type: object
+      required: [name, category, player1, player2, coverage, reliability]
+      properties:
+        name: { type: string }
+        category: { type: string }
+        player1: { type: string }
+        player2: { type: string }
+        coverage: { type: number }
+        reliability: { type: string }
+    ExecutionStage:
+      type: object
+      required: [name, status, detail]
+      properties:
+        name: { type: string }
+        status: { type: string }
+        detail: { type: string }
+    MatrixFirewall:
+      type: object
+      required: [status, independentCommittedAt, matrixRevealedAt]
+      properties:
+        status: { type: string }
+        independentCommittedAt: { type: string }
+        matrixRevealedAt: { type: string }
+    ResultTracking:
+      type: object
+      required: [matrixPrediction, independentAudit, finalSelection]
+      properties:
+        matrixPrediction: { type: string }
+        independentAudit: { type: string }
+        finalSelection: { type: string }
+    BoardRow:
+      allOf:
+        - $ref: "#/components/schemas/AuditMatch"
+        - type: object
+          required: [rank, confidenceBand]
+          properties:
+            rank: { type: number }
+            confidenceBand: { type: string }

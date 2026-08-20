@@ -5,7 +5,9 @@
  * Tennis Matrix Independent Verification and Audit API
  * OpenAPI spec version: 0.1.0
  */
+import type { AuditMatch } from './auditMatch.js';
 
-export interface HealthStatus {
-  status: string;
-}
+export type BoardRow = AuditMatch & {
+  rank: number;
+  confidenceBand: string;
+};

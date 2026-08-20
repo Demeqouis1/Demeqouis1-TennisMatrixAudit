@@ -6,6 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface HealthStatus {
-  status: string;
+export interface EvidenceFamily {
+  name: string;
+  category: string;
+  player1: string;
+  player2: string;
+  coverage: number;
+  reliability: string;
 }

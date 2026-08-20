@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Tennis Audit Console"
+description = "An operator console for ingesting Tennis Matrix summaries, reviewing match evidence, tracking deterministic audit execution, and maintaining a ranked decision board without allowing Matrix outputs to determine the independent audit."
+version = "1.0.0"
+id = "artifacts/tennis-audit"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18641
+
+[services.development]
+run = "pnpm --filter @workspace/tennis-audit run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/tennis-audit", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/tennis-audit/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18641"
+BASE_PATH = "/"
