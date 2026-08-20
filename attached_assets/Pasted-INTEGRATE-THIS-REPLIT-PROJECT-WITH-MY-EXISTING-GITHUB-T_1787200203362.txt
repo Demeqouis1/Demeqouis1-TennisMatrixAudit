@@ -1,0 +1,927 @@
+INTEGRATE THIS REPLIT PROJECT WITH MY EXISTING GITHUB TENNIS AUDIT REPOSITORY AND CONTINUE BUILDING FROM THE EXISTING INFRASTRUCTURE.
+
+IMPORTANT:
+DO NOT START A NEW APP FROM SCRATCH.
+DO NOT REPLACE THE EXISTING ARCHITECTURE.
+DO NOT DELETE OR REWRITE WORK THAT ALREADY EXISTS IN GITHUB.
+
+The GitHub repository is the existing source of truth.
+
+Your first job is to IMPORT, INSPECT, UNDERSTAND, VALIDATE, and CONTINUE the existing project.
+
+============================================================
+1. FIRST ACTION — IMPORT AND INSPECT EXISTING GITHUB REPOSITORY
+============================================================
+
+Connect this Replit project to the existing GitHub repository.
+
+Pull the current default branch and preserve:
+
+- git history
+- branches
+- commits
+- existing folder structure
+- existing database schema
+- migrations
+- tests
+- documentation
+- environment configuration
+- frontend
+- backend
+- API routes
+- workers
+- audit logic
+- PDF logic
+- calibration logic
+- source adapters
+- rule definitions
+- CI configuration
+
+DO NOT initialize an unrelated replacement codebase.
+
+Before modifying anything, inspect the entire repository.
+
+Read at minimum:
+
+README
+architecture documentation
+database/schema files
+migrations
+package manifests
+environment examples
+backend entrypoints
+frontend entrypoints
+API routes
+worker/job code
+tests
+rule-engine code
+calibration logic
+PDF ingestion
+PDF report generation
+source integrations
+GitHub Actions/workflows
+deployment configuration
+
+============================================================
+2. CREATE AN EXISTING-INFRASTRUCTURE AUDIT
+============================================================
+
+Before coding, produce a report called:
+
+EXISTING GITHUB INFRASTRUCTURE AUDIT
+
+For each major required system area, classify it as:
+
+COMPLETE
+PARTIAL
+STUBBED
+MISSING
+BROKEN
+UNKNOWN
+
+Evaluate at minimum:
+
+1. Repository architecture
+2. Frontend
+3. Backend/API
+4. Database
+5. Authentication/permissions
+6. PDF upload
+7. PDF parsing
+8. Image/scanned PDF handling
+9. Match identity resolution
+10. Duplicate detection
+11. Source governance
+12. Web-data collection
+13. Source freshness
+14. Background jobs
+15. Player 1 / Player 2 metrics
+16. Reconstruction engine
+17. Independent probability engine
+18. Matrix firewall
+19. Verification Audit engine
+20. Disagreement/Trap engine
+21. Dangerous Underdog engine
+22. Stress/removal testing
+23. Calibration engine
+24. Calibration versioning
+25. Result monitoring
+26. Retirement/walkover grading
+27. Three-way result grading
+28. Audit-color learning ledger
+29. Post-result autopsy
+30. Ranked board
+31. PDF generation
+32. Audit proof/execution logs
+33. Rule-document versioning
+34. Deterministic completion logic
+35. Automated tests
+36. CI/CD
+37. Backups/exports
+38. Admin controls
+
+Do not assume a component is complete because a file has a similar name.
+
+Verify implementation.
+
+============================================================
+3. DO NOT CLAIM FEATURES EXIST WITHOUT PROOF
+============================================================
+
+For every feature marked COMPLETE, identify:
+
+- files implementing it
+- database tables involved
+- tests proving it
+- routes/functions involved
+- current limitations
+
+If it cannot be demonstrated from code/tests:
+
+DO NOT CALL IT COMPLETE.
+
+Use PARTIAL or UNKNOWN instead.
+
+============================================================
+4. COMPARE CURRENT GITHUB PROJECT TO MASTER SPECIFICATION
+============================================================
+
+Use the Tennis Matrix Independent Verification & Audit System specification I provide in this Replit conversation as the authoritative product specification.
+
+Build a REQUIREMENT GAP MATRIX.
+
+Columns:
+
+Requirement
+Existing implementation
+Relevant files
+Status
+Missing behavior
+Required database changes
+Required backend changes
+Required frontend changes
+Required tests
+Priority
+
+Do not silently reinterpret requirements.
+
+If the existing implementation conflicts with the specification, flag:
+
+SPECIFICATION CONFLICT
+
+Explain the conflict before changing behavior.
+
+============================================================
+5. PRESERVE GOOD EXISTING INFRASTRUCTURE
+============================================================
+
+Reuse existing code whenever it is structurally sound.
+
+Do not rewrite working systems merely because you would implement them differently.
+
+Prefer:
+
+extend
+refactor carefully
+add migrations
+add tests
+add adapters
+add missing constraints
+
+instead of:
+
+delete
+replace everything
+start over
+
+Before performing a major architectural rewrite, explain why the existing architecture cannot safely support the requirement.
+
+============================================================
+6. GIT SAFETY
+============================================================
+
+Treat GitHub history as important.
+
+Before major changes:
+
+- confirm working tree state
+- pull latest changes
+- identify current branch
+- do not overwrite remote work
+
+Create a dedicated implementation branch.
+
+Example:
+
+replit/tennis-audit-integration
+
+Commit changes in logical groups.
+
+Use clear commit messages.
+
+Do not force-push unless explicitly authorized.
+
+Do not rewrite existing Git history.
+
+============================================================
+7. ENVIRONMENT SETUP
+============================================================
+
+Inspect the existing:
+
+.env.example
+package configuration
+runtime version
+database configuration
+external services
+API requirements
+
+Configure Replit to run the existing application.
+
+Do not hard-code credentials.
+
+If required secrets are missing, list them clearly.
+
+Example categories:
+
+DATABASE_URL
+AI provider keys
+tennis data APIs
+odds APIs
+storage
+email/auth if applicable
+PDF/vision service
+web research providers
+
+Never invent credentials.
+
+============================================================
+8. DATABASE SAFETY
+============================================================
+
+Inspect all existing migrations before changing the database.
+
+Do not destroy existing data structures.
+
+All schema changes must use migrations.
+
+If Replit uses a development database, keep it separate from production unless explicitly configured otherwise.
+
+Before destructive migration:
+
+STOP AND EXPLAIN THE IMPACT.
+
+Do not drop tables or columns simply to make implementation easier.
+
+============================================================
+9. GET THE EXISTING APP RUNNING FIRST
+============================================================
+
+Before building new functionality:
+
+1. install existing dependencies
+2. start database/dev services
+3. run migrations
+4. run existing tests
+5. run type checking
+6. run lint
+7. start backend
+8. start frontend
+9. verify application loads
+10. document current failures
+
+Create a BASELINE REPORT containing:
+
+Tests passing
+Tests failing
+Build errors
+Runtime errors
+Missing secrets
+Broken routes
+Broken migrations
+Known incomplete areas
+
+This baseline becomes the comparison point for later work.
+
+============================================================
+10. DO NOT BEGIN WITH UI REDESIGN
+============================================================
+
+Do not spend early implementation time rebuilding a dashboard.
+
+Priority is system integrity.
+
+The development order should prioritize:
+
+1. persisted execution state
+2. match identity
+3. P1/P2 symmetry
+4. rule-document ingestion
+5. source provenance
+6. Matrix firewall
+7. deterministic completion
+8. audit engines
+9. calibration
+10. result grading
+11. reports
+12. UI refinement
+
+============================================================
+11. MATRIX FIREWALL MUST BE VERIFIED IN EXISTING CODE
+============================================================
+
+This is critical.
+
+Determine whether the current GitHub system leaks:
+
+Matrix predicted winner
+Matrix WP
+Matrix MC
+Matrix Elo
+Matrix General Model
+Matrix Specialist Model
+Matrix agreement
+Matrix market
+
+into the independent audit before independent winner commitment.
+
+If yes:
+
+mark:
+
+CRITICAL ARCHITECTURE DEFECT — MATRIX LEAKAGE
+
+Do not simply patch prompts.
+
+Enforce isolation in application architecture.
+
+The independent branch must commit:
+
+independent winner
+independent probability range
+uncertainty
+P1 case
+P2 case
+
+before Matrix direction is revealed.
+
+Persist:
+
+independent_decision_committed_at
+
+matrix_revealed_at
+
+Require:
+
+matrix_revealed_at > independent_decision_committed_at
+
+============================================================
+12. PLAYER 1 AND PLAYER 2 SYMMETRY
+============================================================
+
+Inspect the existing code for one-sided analysis.
+
+The application must NEVER execute metrics/audits only for the Matrix winner.
+
+For every applicable:
+
+metric
+Verification rule
+Disagreement rule
+reconstruction
+underdog pathway
+stress test
+
+there must be valid Player 1 AND Player 2 treatment where the requirement applies.
+
+If current implementation is winner-first or favorite-first, identify every affected component.
+
+============================================================
+13. EXISTING RULE DOCUMENTS
+============================================================
+
+If GitHub already contains:
+
+Verification Audit
+Disagreement/Trap Audit
+Verification Metrics
+Final Record / Calibration
+
+preserve them.
+
+Determine:
+
+- current format
+- parser
+- versions
+- activation logic
+- database representation
+- whether every rule is actually executable
+
+Do not replace them automatically.
+
+Build/complete the versioned Knowledge Base around the existing documents.
+
+============================================================
+14. RULE REPLACEMENT MUST INVALIDATE OLD CURRENT AUDITS
+============================================================
+
+Verify whether existing code handles rule replacement correctly.
+
+When active:
+
+Verification Audit
+Disagreement Audit
+Metrics
+Underdog rules
+Stress tests
+Calibration logic
+Reconstruction formulas
+
+change, affected current audits must become:
+
+STALE_RULE_VERSION_CHANGED
+
+or
+
+INVALIDATED_RERUN_REQUIRED
+
+Historical audits remain preserved.
+
+============================================================
+15. SOURCE INTEGRATION
+============================================================
+
+Inspect all existing web/API source adapters.
+
+Produce:
+
+SOURCE ADAPTER INVENTORY
+
+For every adapter list:
+
+source
+data categories
+authentication
+refresh strategy
+rate limits
+fallback behavior
+reliability
+current status
+
+Do not remove a working source merely to replace it with another source.
+
+Build around a governed multi-source architecture.
+
+============================================================
+16. SOURCE PRIORITY
+============================================================
+
+Use this default hierarchy unless existing authoritative configuration is stronger:
+
+TIER 1:
+Official tournament/tour sources
+
+TIER 2:
+Specialist tennis statistics/rating sources
+
+TIER 3:
+Market/odds sources
+
+TIER 4:
+News/availability sources
+
+For critical facts seek multiple independent sources where practical.
+
+Do not silently select one when credible sources disagree.
+
+============================================================
+17. CONTINUOUS WEB DATA
+============================================================
+
+Where infrastructure already exists, extend it into scheduled/background collection.
+
+The system should maintain fresh:
+
+rankings
+results
+draws
+surface
+Elo
+surface Elo
+serve/return
+recent form
+H2H
+odds
+injury/availability
+weather/conditions
+match status
+
+Use background workers/jobs rather than requiring the user to manually refresh every match.
+
+============================================================
+18. PRE-MATCH DATA INTEGRITY
+============================================================
+
+Preserve existing pre-match data if present.
+
+Implement:
+
+research_lock_at
+scheduled local time
+scheduled UTC
+actual first serve
+source retrieval timestamps
+
+No post-first-serve evidence may contaminate the original pre-match audit.
+
+============================================================
+19. RESULT GRADING RULES
+============================================================
+
+Implement exactly:
+
+NORMAL COMPLETION:
+regular WIN/LOSS
+
+IN-MATCH RETIREMENT:
+regular WIN/LOSS
+included in calibration
+
+PRE-MATCH RETIREMENT/WITHDRAWAL:
+YELLOW_NON_GRADED
+
+WALKOVER:
+YELLOW_NON_GRADED
+
+CANCELLATION:
+YELLOW_NON_GRADED
+
+Yellow non-graded entries:
+
+ARE visible in master calibration history
+DO advance master record sequence
+DO create a calibration version/history event
+
+but:
+
+DO NOT increase calibration wins
+DO NOT increase calibration losses
+DO NOT increase bucket numerator
+DO NOT increase bucket denominator
+DO NOT change Verified Win Rate
+
+============================================================
+20. EXISTING CALIBRATION DATA MUST BE PRESERVED
+============================================================
+
+Do not replace or reset existing calibration history.
+
+Starting baseline lineage originally uses:
+
+<=55:
+1/3 = 33.3%
+
+56-64:
+13/23 = 56.5%
+
+65-69:
+15/19 = 78.9%
+
+70-74:
+20/27 = 74.1%
+
+75-79:
+19/26 = 73.1%
+
+80-84:
+9/12 = 75.0%
+
+85-89:
+6/8 = 75.0%
+
+90+:
+2/2 = 100.0%
+SMALL SAMPLE
+
+If the GitHub project already contains calibration versions beyond this baseline:
+
+DO NOT RESET THEM.
+
+Validate them and continue the lineage.
+
+============================================================
+21. THREE-WAY RESULT TRACKING
+============================================================
+
+Ensure existing data model supports:
+
+matrix_prediction_result
+independent_audit_result
+final_selection_result
+
+These must be stored separately.
+
+This is required to determine whether the independent audit:
+
+corrected the Matrix
+
+or
+
+introduced the error.
+
+============================================================
+22. AUDIT-COLOR LEARNING LEDGER
+============================================================
+
+Build/validate a separate ledger for:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED/PASS
+
+This must remain separate from Matrix WP calibration.
+
+Do not mix their denominators.
+
+============================================================
+23. POST-RESULT AUTOPSY
+============================================================
+
+Every eligible Green/Double-Green loss should trigger an automated audit autopsy.
+
+Use pre-match evidence only.
+
+Possible categories include:
+
+rapid riser missed
+stale rating
+surface mispricing
+market contradiction
+opponent ceiling
+injury uncertainty
+matchup collision
+workload
+ranking lag
+bad reconstruction
+correlated evidence overcount
+missing critical family
+underdog pathway underestimated
+probability construction error
+
+Do not rewrite the original historical audit.
+
+============================================================
+24. DETERMINISTIC COMPLETION
+============================================================
+
+This is one of the first existing systems you must inspect.
+
+The AI may not say COMPLETE.
+
+The application calculates completion.
+
+Required counters include:
+
+P1 metrics
+P2 metrics
+Verification rules
+Disagreement rules
+Underdog pathways
+Stress tests
+Critical source requirements
+Evidence-family coverage
+Reconstructions
+Calibration
+Matrix firewall
+
+The phrases:
+
+AUDIT COMPLETE
+
+and
+
+NO SHORTCUTS
+
+may appear only when deterministic completion logic returns TRUE.
+
+============================================================
+25. MASTER RANKING
+============================================================
+
+Preserve/build ONE ranked board.
+
+PRIMARY SORT:
+
+DOUBLE GREEN
+GREEN
+YELLOW
+RED/PASS
+INCOMPLETE
+
+SECONDARY SORT WITHIN EACH GROUP:
+
+CURRENT GLOBAL CALIBRATION VERIFIED WIN RATE
+highest to lowest
+
+Do not secondary-sort merely by Matrix WP.
+
+============================================================
+26. PDF OUTPUT
+============================================================
+
+Continue toward the existing supplied Master Audit style.
+
+Required:
+
+clean white background
+dark navy headers
+calibration legend
+calibration-colored rows
+separate Audit Color
+one combined ranking
+continuation pages
+decision trace
+version metadata
+
+Validate:
+
+one row per canonical match
+no duplicate rows
+correct calibration colors
+correct primary ranking
+correct secondary ranking
+header totals match rows
+
+============================================================
+27. REPLIT DEVELOPMENT PLAN
+============================================================
+
+After inspecting the GitHub repository, provide a plan based on what ALREADY EXISTS.
+
+Do not give me a generic greenfield plan.
+
+Organize implementation into:
+
+KEEP AS-IS
+REPAIR
+EXTEND
+REFACTOR
+BUILD MISSING
+
+For each item identify exact existing files/modules.
+
+Recommended work order after repository inspection:
+
+Phase 1:
+Import repository and get current app running.
+
+Phase 2:
+Fix baseline build/test/runtime failures.
+
+Phase 3:
+Implement/repair deterministic integrity infrastructure.
+
+Phase 4:
+Complete P1/P2 independent data pipeline.
+
+Phase 5:
+Complete Verification and Disagreement engines.
+
+Phase 6:
+Complete Dangerous Underdog and stress/removal engines.
+
+Phase 7:
+Complete Matrix firewall and final combination gate.
+
+Phase 8:
+Complete calibration/result grading.
+
+Phase 9:
+Complete Master Ranked Board/PDF.
+
+Phase 10:
+Complete post-result learning/autopsies.
+
+Phase 11:
+Full invariant tests and production hardening.
+
+============================================================
+28. DO NOT DUPLICATE EXISTING WORK
+============================================================
+
+Before creating any:
+
+database table
+API route
+component
+worker
+audit module
+source adapter
+calibration function
+PDF component
+rule parser
+
+search the existing repository.
+
+If equivalent functionality exists:
+
+extend or repair it.
+
+Do not create parallel duplicate systems unless there is a justified migration plan.
+
+============================================================
+29. REQUIREMENT TRACEABILITY
+============================================================
+
+Create a persistent REQUIREMENTS_MATRIX.md or equivalent project document.
+
+Every major requirement must map to:
+
+requirement ID
+implementation status
+files/modules
+database objects
+tests
+remaining work
+
+This document must be updated as implementation progresses.
+
+============================================================
+30. FIRST RESPONSE REQUIRED FROM REPLIT
+============================================================
+
+DO NOT IMMEDIATELY START REWRITING CODE.
+
+Your first response after repository import must contain:
+
+A. Repository summary
+
+B. Existing architecture
+
+C. Current application startup status
+
+D. Existing infrastructure audit
+
+E. Requirement gap matrix summary
+
+F. Critical defects
+
+G. Matrix firewall status
+
+H. Player 1 / Player 2 symmetry status
+
+I. Calibration lineage status
+
+J. Existing automated-test status
+
+K. Recommended next implementation step
+
+L. Any missing secrets/integrations I must provide
+
+M. Exact files you intend to modify first
+
+============================================================
+31. FINAL CONTRACT
+============================================================
+
+The GitHub repository already contains infrastructure.
+
+YOUR JOB IS TO CONTINUE IT, NOT REPLACE IT.
+
+DO NOT CLAIM A FEATURE IS COMPLETE UNTIL CODE AND TESTS PROVE IT.
+
+DO NOT CLAIM THE AUDIT ENGINE IS COMPLETE UNTIL DETERMINISTIC EXECUTION PROVES IT.
+
+THE MATRIX MAY BE COMPARED TO THE AUDIT.
+THE MATRIX MAY NOT DETERMINE THE AUDIT.
+
+NO PLAYER 1 WITHOUT PLAYER 2.
+
+NO PLAYER 2 WITHOUT PLAYER 1.
+
+NO MISSING METRIC MAY BE INVENTED.
+
+NO RULE MAY BE SILENTLY SKIPPED.
+
+NO MATRIX-DERIVED SIGNAL MAY SATISFY THE INDEPENDENT GREEN EVIDENCE MINIMUM.
+
+NO DANGEROUS UNDERDOG AUDIT = NO GREEN.
+
+NO MATRIX REMOVAL SURVIVAL = NO GREEN.
+
+NO EXECUTION RECORD = NO COMPLETION.
+
+BLOCK DEPENDENCIES, NOT THE WHOLE SLATE.
+
+PRESERVE GITHUB HISTORY.
+
+PRESERVE EXISTING WORK.
+
+GET THE EXISTING APPLICATION RUNNING FIRST.
+
+THEN BUILD THE MISSING INTEGRITY LAYERS.
+
+START BY IMPORTING AND AUDITING THE EXISTING GITHUB REPOSITORY.
+DO NOT START A NEW GREENFIELD APP.
