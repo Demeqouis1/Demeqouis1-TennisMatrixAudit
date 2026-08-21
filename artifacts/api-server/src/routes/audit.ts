@@ -116,12 +116,7 @@ const makeMatch = (
   blockers,
 });
 
-const matches: Match[] = [
-  makeMatch("m-001", "Iga Swiatek", "Jasmine Paolini", "Cincinnati Open", "Quarterfinal", "Hard", "DOUBLE_GREEN", 100, "Iga Swiatek", "Iga Swiatek", 0.78, 0.789, 10),
-  makeMatch("m-002", "Aryna Sabalenka", "Elena Rybakina", "Cincinnati Open", "Quarterfinal", "Hard", "GREEN", 82, "Aryna Sabalenka", "Aryna Sabalenka", 0.71, 0.741, 7),
-  makeMatch("m-003", "Jannik Sinner", "Alexander Zverev", "Cincinnati Open", "Semifinal", "Hard", "YELLOW", 58, "Jannik Sinner", "Alexander Zverev", 0.63, 0.731, 5, ["CRITICAL_SOURCE_STALE"]),
-  makeMatch("m-004", "Coco Gauff", "Madison Keys", "Cincinnati Open", "Quarterfinal", "Hard", "INCOMPLETE", 31, "UNCOMMITTED", "Coco Gauff", 0.69, 0.565, 3, ["PLAYER_ID_UNRESOLVED", "VERIFICATION_RULE_UNMAPPED"]),
-];
+const matches: Match[] = [];
 
 const router: IRouter = Router();
 
@@ -202,6 +197,26 @@ router.post("/audit/run-ready", pdfUpload.single("pdf"), async (req, res) => {
       disagreement: (input) => ({ player1: input.player1, player2: input.player2, status: "READY" }),
       metrics: (input) => ({ player1: input.player1, player2: input.player2, status: "READY" }),
     });
+    const uploadedMatch = makeMatch(
+      run.id,
+      run.player1,
+      run.player2,
+      "Uploaded PDF",
+      "Submitted matchup",
+      "UNAVAILABLE",
+      "INCOMPLETE",
+      0,
+      "UNCOMMITTED",
+      "UNAVAILABLE",
+      0,
+      0,
+      0,
+      ["AUDIT_EXECUTION_PENDING_PUBLIC_EVIDENCE"],
+    );
+    uploadedMatch.executionStages[0] = { name: "Summary ingestion", status: "COMPLETE", detail: `Uploaded PDF parsed for ${run.player1} vs ${run.player2}.` };
+    uploadedMatch.executionStages[1] = { name: "Identity verification", status: "COMPLETE", detail: `Both identities confirmed from ${run.provenance.source_location}.` };
+    uploadedMatch.evidenceFamilies = [];
+    matches.push(uploadedMatch);
     res.json({
       status: "READY_FOR_AUDIT",
       executed: 1,

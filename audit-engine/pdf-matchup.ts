@@ -177,7 +177,7 @@ function independentlyVerifyCandidate(pdf: UploadedPdf, candidate: MatchupCandid
 
 function verifyCandidate(pdf: UploadedPdf, candidate: MatchupCandidate, allCandidates: readonly MatchupCandidate[], threshold: number): MatchupCandidate {
   const independentlyConfirmed = independentlyVerifyCandidate(pdf, candidate);
-  if (!independentlyConfirmed || !candidate.relationshipConfirmed || candidate.confidence < threshold || allCandidates.length !== 1) {
+  if (!independentlyConfirmed || !candidate.relationshipConfirmed || candidate.confidence + Number.EPSILON < threshold || allCandidates.length !== 1) {
     const status: Exclude<ExtractionStatus, "CONFIRMED"> = allCandidates.length > 1 ? "AMBIGUOUS" : "INSUFFICIENT";
     throw new MatchupExtractionError("Uploaded PDF does not contain a confidently identified Player 1 vs Player 2 matchup.", status, provenance(pdf, status, candidate, allCandidates.length > 1 ? allCandidates.map((item) => `${item.player1} vs ${item.player2}`) : []));
   }
