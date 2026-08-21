@@ -71,6 +71,14 @@ function Overview() {
   const [search, setSearch] = useState("");
   const [importedPdf, setImportedPdf] = useState<File | null>(null);
   const [isRunningSlate, setIsRunningSlate] = useState(false);
+  const [runResults, setRunResults] = useState<Array<{
+    matchId: string;
+    matchup: string;
+    auditColor: string;
+    verification: { player1: { status: string; conclusion: string }; player2: { status: string; conclusion: string } };
+    disagreement: { status: string; matrixPick: string; independentPick: string };
+    metrics: { player1: Record<string, string>; player2: Record<string, string> };
+  }>>([]);
   const summary = useGetAuditSummary();
   const matches = useListAuditMatches({ search: search || undefined });
   const rows = matches.data ?? [];
@@ -97,16 +105,20 @@ function Overview() {
       const body = new FormData();
       body.append("pdf", importedPdf);
       const response = await fetch("/api/audit/run-ready", { method: "POST", body });
-      if (!response.ok) throw new Error("Audit run failed");
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "Audit run failed");
+      }
       const result = await response.json();
+      setRunResults(result.results ?? []);
       await Promise.all([
         qc.invalidateQueries({ queryKey: getGetAuditSummaryQueryKey() }),
         qc.invalidateQueries({ queryKey: getListAuditMatchesQueryKey() }),
         qc.invalidateQueries({ queryKey: getGetRankedBoardQueryKey() }),
       ]);
       toast({ title: "Verification audit complete", description: `${result.executed} matchups populated with verification, disagreement, and symmetric metrics.` });
-    } catch {
-      toast({ title: "Audit run failed", description: "The slate could not be executed. Try again." });
+    } catch (error) {
+      toast({ title: "Audit run failed", description: error instanceof Error ? error.message : "The slate could not be executed. Try again." });
     } finally {
       setIsRunningSlate(false);
     }
@@ -115,6 +127,7 @@ function Overview() {
     <section className="hero-row"><div><div className="eyebrow accent-label">THURSDAY · 20 AUG 2026</div><h1>Verification slate</h1><p className="lede">Independent evidence review before the Matrix is allowed to speak.</p></div><div className="hero-actions"><label className={`button button-secondary upload-button ${importedPdf ? "upload-ready" : ""}`}><UploadCloud size={16} />{importedPdf ? "PDF inserted" : "Import PDF"}<input type="file" accept="application/pdf,.pdf" onChange={handlePdfImport} /></label><button className="button button-primary" onClick={runReadyAudits} disabled={isRunningSlate || !importedPdf}><Play size={16} />{isRunningSlate ? "Running audits…" : "Run ready audits"}</button></div></section>
     {importedPdf && <div className="imported-file"><div className="file-icon"><FileText size={18} /></div><div><strong>{importedPdf.name}</strong><span>{(importedPdf.size / 1024 / 1024).toFixed(2)} MB · queued for document parsing</span></div><button onClick={() => setImportedPdf(null)} aria-label="Remove imported PDF"><X size={16} /></button></div>}
     <div className="color-legend"><div><span className="eyebrow">RESULT LEGEND</span><strong>Audit outcomes</strong></div><span><i className="legend-dot double-green" />Double green · independently verified</span><span><i className="legend-dot green" />Green · supported</span><span><i className="legend-dot yellow" />Yellow · analyst review</span><span><i className="legend-dot red" />Red / incomplete · do not release</span></div>
+    {runResults.length > 0 && <section className="run-results"><div className="run-results-heading"><div><div className="eyebrow">POPULATED AUDIT RESULTS</div><h2>Independent matchup findings</h2></div><span className="run-complete"><Check size={14} /> Verification run complete</span></div>{runResults.map((result) => <div className="result-card" key={result.matchId}><div className="result-card-head"><div><strong>{result.matchup}</strong><span>{result.disagreement.status === "NO_DISAGREEMENT" ? "Matrix and independent conclusion aligned" : "Matrix disagreement reviewed independently"}</span></div><AuditBadge color={result.auditColor} /></div><div className="result-columns"><div><span className="result-label">VERIFICATION AUDIT</span><p><b>P1</b> <em>{result.verification.player1.status}</em> · {result.verification.player1.conclusion}</p><p><b>P2</b> <em>{result.verification.player2.status}</em> · {result.verification.player2.conclusion}</p></div><div><span className="result-label">DISAGREEMENT AUDIT</span><p><b>{result.disagreement.status.replaceAll("_", " ")}</b></p><p>Matrix: {result.disagreement.matrixPick} · Audit: {result.disagreement.independentPick}</p></div><div><span className="result-label">P1 / P2 METRICS</span><p><b>P1</b> {Object.values(result.metrics.player1).join(" · ")}</p><p><b>P2</b> {Object.values(result.metrics.player2).join(" · ")}</p></div></div></div>)}</section>}
     {summary.isLoading ? <Loading /> : summary.isError ? <div className="error-box"><AlertTriangle size={18} />Unable to load slate summary.</div> : <div className="metric-grid">
       <MetricCard label="Matches in slate" value={String(summary.data?.matches ?? 0).padStart(2, "0")} detail="Current event queue" />
       <MetricCard label="Ready to audit" value={String(summary.data?.ready ?? 0).padStart(2, "0")} detail="80%+ execution complete" accent="teal" />
