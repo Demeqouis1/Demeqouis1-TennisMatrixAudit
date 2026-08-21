@@ -1,7 +1,7 @@
 import { type ReactNode, useMemo, useState } from "react";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Link, Route, Switch, useLocation, useRoute, Router as WouterRouter } from "wouter";
-import { AlertTriangle, ArrowUpRight, Check, ChevronRight, CircleDashed, Clock3, FileCheck2, Filter, Flame, LayoutDashboard, ListChecks, Menu, Play, Search, ShieldCheck, Trophy, X } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, Check, ChevronRight, CircleDashed, Clock3, FileCheck2, FileText, Filter, Flame, LayoutDashboard, ListChecks, Menu, Play, Search, ShieldCheck, Trophy, UploadCloud, X } from "lucide-react";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
@@ -69,11 +69,25 @@ function MetricCard({ label, value, detail, accent }: { label: string; value: st
 
 function Overview() {
   const [search, setSearch] = useState("");
+  const [importedPdf, setImportedPdf] = useState<File | null>(null);
   const summary = useGetAuditSummary();
   const matches = useListAuditMatches({ search: search || undefined });
   const rows = matches.data ?? [];
+  const { toast } = useToast();
+  const handlePdfImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      toast({ title: "PDF required", description: "Choose a PDF export from Tennis Matrix." });
+      return;
+    }
+    setImportedPdf(file);
+    toast({ title: "PDF inserted", description: `${file.name} is ready for parsing.` });
+  };
   return <div className="page">
-    <section className="hero-row"><div><div className="eyebrow accent-label">THURSDAY · 20 AUG 2026</div><h1>Verification slate</h1><p className="lede">Independent evidence review before the Matrix is allowed to speak.</p></div><div className="hero-actions"><button className="button button-secondary"><FileCheck2 size={16} />Import PDF</button><button className="button button-primary"><Play size={16} />Run ready audits</button></div></section>
+    <section className="hero-row"><div><div className="eyebrow accent-label">THURSDAY · 20 AUG 2026</div><h1>Verification slate</h1><p className="lede">Independent evidence review before the Matrix is allowed to speak.</p></div><div className="hero-actions"><label className={`button button-secondary upload-button ${importedPdf ? "upload-ready" : ""}`}><UploadCloud size={16} />{importedPdf ? "PDF inserted" : "Import PDF"}<input type="file" accept="application/pdf,.pdf" onChange={handlePdfImport} /></label><button className="button button-primary"><Play size={16} />Run ready audits</button></div></section>
+    {importedPdf && <div className="imported-file"><div className="file-icon"><FileText size={18} /></div><div><strong>{importedPdf.name}</strong><span>{(importedPdf.size / 1024 / 1024).toFixed(2)} MB · queued for document parsing</span></div><button onClick={() => setImportedPdf(null)} aria-label="Remove imported PDF"><X size={16} /></button></div>}
     {summary.isLoading ? <Loading /> : summary.isError ? <div className="error-box"><AlertTriangle size={18} />Unable to load slate summary.</div> : <div className="metric-grid">
       <MetricCard label="Matches in slate" value={String(summary.data?.matches ?? 0).padStart(2, "0")} detail="Current event queue" />
       <MetricCard label="Ready to audit" value={String(summary.data?.ready ?? 0).padStart(2, "0")} detail="80%+ execution complete" accent="teal" />
