@@ -33,19 +33,19 @@ export type ReasonCode =
   | "DUPLICATE_CALIBRATION_ENTRY_BLOCKED"
   | "POST_START_DATA_EXCLUDED_FROM_PREMATCH_AUDIT";
 
-export interface PlayerMetricTreatment {
+export interface PlayerMetricHandling {
   playerId: string;
   metricId: string;
   status: ExecutionStatus;
-  treatment: "DIRECT" | "RECONSTRUCTED" | "PARTIAL" | "UNAVAILABLE" | "EXCLUDED";
+  handling: "DIRECT" | "RECONSTRUCTED" | "PARTIAL" | "UNAVAILABLE" | "EXCLUDED";
 }
 
 export interface MatchExecutionSnapshot {
   matchId: string;
   mandatoryMetricIds: readonly string[];
   requirementExecutions: readonly RequirementExecution[];
-  p1Treatments: readonly PlayerMetricTreatment[];
-  p2Treatments: readonly PlayerMetricTreatment[];
+  p1Handling: readonly PlayerMetricHandling[];
+  p2Handling: readonly PlayerMetricHandling[];
   verificationExecuted: number;
   verificationTotal: number;
   disagreementExecuted: number;
@@ -93,7 +93,6 @@ export type RequirementDisposition = "NOT_STARTED" | "COMPLETE" | "PARTIAL" | "U
 export type EvidenceStrength = "STRONG" | "WEAK" | "CONFLICT";
 export type EvidenceReliability = "HIGH" | "MEDIUM" | "LOW";
 export type DisagreementRelationship = "INDEPENDENT" | "PARTIALLY_CORRELATED" | "DUPLICATIVE";
-export type TrapDecision = "KEEP" | "DOWNGRADE" | "REMOVE_PASS" | "FLIP";
 
 export interface RequirementExecution {
   requirementId: number;
@@ -123,22 +122,6 @@ export interface DisagreementSignal {
   reliability: EvidenceReliability;
   material: boolean;
   note: string;
-}
-
-export interface TrapAssessment {
-  componentSupport: boolean;
-  multipleComponentSupport: boolean;
-  marketSupport: boolean;
-  monteCarloBelow55: boolean;
-  monteCarloBelow50: boolean;
-  fresherUnderdog: boolean;
-  improvingUnderdog: boolean;
-  moderateOrCloser: boolean;
-  highConfidenceLabel: boolean;
-  surfaceStyleFit: boolean;
-  ceilingEvent: boolean;
-  ratingLag: "CURRENTLY_REPRESENTATIVE" | "POSSIBLY_STALE" | "CLEARLY_LAGGING";
-  decision: TrapDecision;
 }
 
 export interface CalibrationObservation {

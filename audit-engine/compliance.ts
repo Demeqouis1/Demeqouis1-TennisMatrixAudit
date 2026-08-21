@@ -4,7 +4,6 @@ import type {
   EvidenceLedgerEntry,
   RequirementDisposition,
   RequirementExecution,
-  TrapAssessment,
 } from "./domain.js";
 
 const ACCEPTED_DISPOSITIONS: readonly RequirementDisposition[] = ["COMPLETE", "PARTIAL", "UNAVAILABLE", "EXCLUDED"];
@@ -32,21 +31,6 @@ export function calculateRequirementCompletion(requirements: readonly Requiremen
 
 export function countMaterialIndependentDisagreements(signals: readonly DisagreementSignal[]): number {
   return signals.filter((signal) => signal.material && signal.relationship === "INDEPENDENT" && signal.reliability === "HIGH").length;
-}
-
-export function trapGameScore(assessment: TrapAssessment): number {
-  return [
-    assessment.componentSupport,
-    assessment.multipleComponentSupport,
-    assessment.marketSupport,
-    assessment.monteCarloBelow55,
-    assessment.monteCarloBelow50,
-    assessment.fresherUnderdog,
-    assessment.improvingUnderdog,
-    assessment.moderateOrCloser,
-    assessment.highConfidenceLabel,
-    assessment.surfaceStyleFit,
-  ].filter(Boolean).length;
 }
 
 export function evidenceFamilyCount(entries: readonly EvidenceLedgerEntry[]): number {

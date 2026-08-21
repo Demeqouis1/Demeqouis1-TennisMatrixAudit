@@ -5,7 +5,7 @@ This repository implements a deterministic audit engine. It proves work through 
 ## Core contract
 
 - Matrix outputs are a benchmark and cannot determine the independent audit.
-- Player 1 and Player 2 receive symmetric treatment for every applicable metric.
+- Player 1 and Player 2 receive symmetric handling for every applicable metric.
 - No execution record means no completion.
 - AI-assisted research may interpret evidence, but application code owns completion and Green eligibility.
 

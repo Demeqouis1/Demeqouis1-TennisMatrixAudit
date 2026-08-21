@@ -13,6 +13,26 @@ CREATE TABLE audit_runs (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE uploaded_pdf_matchup_provenance (
+  audit_run_id UUID PRIMARY KEY REFERENCES audit_runs(id),
+  source_type TEXT NOT NULL CHECK (source_type = 'uploaded_pdf'),
+  uploaded_file_name TEXT NOT NULL,
+  uploaded_file_id TEXT NOT NULL,
+  player1 TEXT NOT NULL,
+  player2 TEXT NOT NULL,
+  player1_raw_text TEXT NOT NULL,
+  player2_raw_text TEXT NOT NULL,
+  normalized_player1 TEXT NOT NULL,
+  normalized_player2 TEXT NOT NULL,
+  source_page INTEGER NOT NULL,
+  source_text TEXT NOT NULL,
+  source_location TEXT NOT NULL,
+  relationship_confirmed BOOLEAN NOT NULL,
+  extraction_confidence NUMERIC NOT NULL,
+  extraction_status TEXT NOT NULL CHECK (extraction_status IN ('CONFIRMED', 'AMBIGUOUS', 'INSUFFICIENT', 'FAILED')),
+  ambiguous_candidates JSONB NOT NULL DEFAULT '[]'
+);
+
 CREATE TABLE execution_logs (
   id UUID PRIMARY KEY,
   audit_run_id UUID NOT NULL REFERENCES audit_runs(id),

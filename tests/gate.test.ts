@@ -4,7 +4,7 @@ import { effectiveIndependentEvidenceCount, evaluateFinalColor } from "../audit-
 import type { GreenGateInput } from "../audit-engine/gate.js";
 
 const input = (): GreenGateInput => ({
-  matchId: "m1", mandatoryMetricIds: [], requirementExecutions: Array.from({ length: 50 }, (_, index) => ({ requirementId: index + 1, disposition: "COMPLETE" as const, attemptedAt: "2026-08-19T10:00:00Z" })), p1Treatments: [], p2Treatments: [],
+  matchId: "m1", mandatoryMetricIds: [], requirementExecutions: Array.from({ length: 50 }, (_, index) => ({ requirementId: index + 1, disposition: "COMPLETE" as const, attemptedAt: "2026-08-19T10:00:00Z" })), p1Handling: [], p2Handling: [],
   verificationExecuted: 1, verificationTotal: 1, disagreementExecuted: 1, disagreementTotal: 1,
   underdogExecuted: 1, underdogTotal: 1, stressExecuted: 1, stressTotal: 1,
   criticalSourcesExecuted: 1, criticalSourcesTotal: 1, evidenceFamiliesExecuted: 6, evidenceFamiliesTotal: 6,

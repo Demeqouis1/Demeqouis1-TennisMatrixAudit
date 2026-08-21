@@ -12,13 +12,14 @@
     "typecheck:audit": "tsc --noEmit -p tsconfig.json"
   },
   "private": true,
-  "dependencies": {
-    "@replit/connectors-sdk": "^0.4.1"
-  },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "prettier": "^3.9.6",
     "tsx": "^4.19.0",
     "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@replit/connectors-sdk": "^0.4.1",
+    "pdf-parse": "^2.4.5"
   }
 }

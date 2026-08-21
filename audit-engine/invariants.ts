@@ -1,13 +1,13 @@
-import type { CompletionProof, MatchExecutionSnapshot, PlayerMetricTreatment, ResultInput, GradedResult, ReasonCode } from "./domain.js";
+import type { CompletionProof, MatchExecutionSnapshot, PlayerMetricHandling, ResultInput, GradedResult, ReasonCode } from "./domain.js";
 
-function completeTreatment(playerId: string, metricId: string, treatment: PlayerMetricTreatment["treatment"]): PlayerMetricTreatment {
-  return { playerId, metricId, status: "COMPLETE", treatment };
+function completeHandling(playerId: string, metricId: string, handling: PlayerMetricHandling["handling"]): PlayerMetricHandling {
+  return { playerId, metricId, status: "COMPLETE", handling };
 }
 
 export function missingSymmetricMetricIds(snapshot: MatchExecutionSnapshot): string[] {
   const required = new Set(snapshot.mandatoryMetricIds);
-  const p1 = new Set(snapshot.p1Treatments.filter((item) => item.status === "COMPLETE").map((item) => item.metricId));
-  const p2 = new Set(snapshot.p2Treatments.filter((item) => item.status === "COMPLETE").map((item) => item.metricId));
+  const p1 = new Set(snapshot.p1Handling.filter((item) => item.status === "COMPLETE").map((item) => item.metricId));
+  const p2 = new Set(snapshot.p2Handling.filter((item) => item.status === "COMPLETE").map((item) => item.metricId));
   return [...required].filter((metricId) => !p1.has(metricId) || !p2.has(metricId));
 }
 
@@ -54,4 +54,4 @@ export function gradeResult(input: ResultInput): GradedResult {
   return { grade: "PASS", countedInCalibration: false, masterSequenceAdvances: true };
 }
 
-export { completeTreatment };
+export { completeHandling };

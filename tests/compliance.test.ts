@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateRequirementCompletion, createRequirementLedger, evidenceFamilyCount, recomputeCalibration, trapGameScore } from "../audit-engine/compliance.js";
+import { calculateRequirementCompletion, createRequirementLedger, evidenceFamilyCount, recomputeCalibration } from "../audit-engine/compliance.js";
 
 test("Parts 1-50 require an execution disposition for every rule", () => {
   const ledger = createRequirementLedger("2026-08-19T10:00:00Z");
@@ -10,15 +10,6 @@ test("Parts 1-50 require an execution disposition for every rule", () => {
   assert.ok(firstRequirement);
   ledger[0] = { ...firstRequirement, disposition: "COMPLETE" };
   assert.equal(calculateRequirementCompletion(ledger).complete, false);
-});
-
-test("trap score counts only the ten defined underdog checks", () => {
-  assert.equal(trapGameScore({
-    componentSupport: true, multipleComponentSupport: true, marketSupport: false,
-    monteCarloBelow55: true, monteCarloBelow50: false, fresherUnderdog: true,
-    improvingUnderdog: false, moderateOrCloser: true, highConfidenceLabel: false,
-    surfaceStyleFit: true, ceilingEvent: true, ratingLag: "CLEARLY_LAGGING", decision: "DOWNGRADE",
-  }), 6);
 });
 
 test("calibration buckets are recomputed from the supplied observations", () => {

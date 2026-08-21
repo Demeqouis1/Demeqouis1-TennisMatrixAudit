@@ -1,14 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateCompletion, completeTreatment, gradeResult, missingSymmetricMetricIds, verifyMatrixFirewall } from "../audit-engine/invariants.js";
+import { calculateCompletion, completeHandling, gradeResult, missingSymmetricMetricIds, verifyMatrixFirewall } from "../audit-engine/invariants.js";
 import type { MatchExecutionSnapshot } from "../audit-engine/domain.js";
 
 const baseSnapshot = (): MatchExecutionSnapshot => ({
   matchId: "m1",
   mandatoryMetricIds: ["serve", "return"],
   requirementExecutions: Array.from({ length: 50 }, (_, index) => ({ requirementId: index + 1, disposition: "COMPLETE" as const, attemptedAt: "2026-08-19T10:00:00Z" })),
-  p1Treatments: [completeTreatment("p1", "serve", "DIRECT"), completeTreatment("p1", "return", "DIRECT")],
-  p2Treatments: [completeTreatment("p2", "serve", "DIRECT"), completeTreatment("p2", "return", "DIRECT")],
+  p1Handling: [completeHandling("p1", "serve", "DIRECT"), completeHandling("p1", "return", "DIRECT")],
+  p2Handling: [completeHandling("p2", "serve", "DIRECT"), completeHandling("p2", "return", "DIRECT")],
   verificationExecuted: 1, verificationTotal: 1,
   disagreementExecuted: 1, disagreementTotal: 1,
   underdogExecuted: 1, underdogTotal: 1,
@@ -25,7 +25,7 @@ const baseSnapshot = (): MatchExecutionSnapshot => ({
 
 test("requires both players for every mandatory metric", () => {
   const snapshot = baseSnapshot();
-  snapshot.p2Treatments = [completeTreatment("p2", "serve", "DIRECT")];
+  snapshot.p2Handling = [completeHandling("p2", "serve", "DIRECT")];
   assert.deepEqual(missingSymmetricMetricIds(snapshot), ["return"]);
   assert.equal(calculateCompletion(snapshot).complete, false);
 });
