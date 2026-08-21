@@ -1,9 +1,18 @@
 import { Router, type IRouter } from "express";
+import multer from "multer";
+import { randomUUID } from "node:crypto";
+import { PDFParse } from "pdf-parse";
 import {
   ExecuteAuditMatchParams,
   GetAuditMatchParams,
   ListAuditMatchesQueryParams,
 } from "@workspace/api-zod";
+import { createUploadedPdfAuditRun, executeUploadedPdfAudit } from "../../../../audit-engine/pdf-run.js";
+
+const pdfUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 25 * 1024 * 1024 },
+});
 
 type Match = {
   id: string;
@@ -173,48 +182,49 @@ router.post("/audit/matches/:matchId/execute", (req, res) => {
   res.json(match);
 });
 
-router.post("/audit/run-ready", (_req, res) => {
-  for (const match of matches) {
-    match.progress = 100;
-    match.status = "READY FOR FINAL GATE";
-    match.executionStages = stages(10);
-    match.matrixFirewall = {
-      status: "VALID",
-      independentCommittedAt: now,
-      matrixRevealedAt: "2026-08-20T03:00:04.000Z",
-    };
-    if (match.id === "m-004") {
-      match.auditColor = "YELLOW";
-      match.blockers = ["PLAYER_ID_UNRESOLVED"];
-    } else {
-      match.blockers = [];
-    }
+router.post("/audit/run-ready", pdfUpload.single("pdf"), async (req, res) => {
+  if (!req.file) {
+    res.status(400).json({ error: "UPLOADED_PDF_REQUIRED", message: "Attach one PDF in the pdf form field." });
+    return;
   }
-  res.json({
-    status: "COMPLETE",
-    executed: matches.length,
-    verificationAudit: "COMPLETE",
-    disagreementAudit: "COMPLETE",
-    metrics: "P1_P2_SYMMETRY_COMPLETE",
-    results: matches.map((match) => ({
-      matchId: match.id,
-      matchup: `${match.player1} vs ${match.player2}`,
-      auditColor: match.auditColor,
-      verification: {
-        player1: { status: "PASS", conclusion: `${match.player1} evidence verified` },
-        player2: { status: "PASS", conclusion: `${match.player2} evidence verified` },
-      },
-      disagreement: {
-        status: match.matrixWinner === match.independentWinner ? "NO_DISAGREEMENT" : "DISAGREEMENT_REVIEWED",
-        matrixPick: match.matrixWinner,
-        independentPick: match.independentWinner,
-      },
-      metrics: {
-        player1: { presentStrength: match.evidenceFamilies[0].player1, surfaceForm: match.evidenceFamilies[1].player1, serveReturn: match.evidenceFamilies[2].player1 },
-        player2: { presentStrength: match.evidenceFamilies[0].player2, surfaceForm: match.evidenceFamilies[1].player2, serveReturn: match.evidenceFamilies[2].player2 },
-      },
-    })),
-  });
+
+  let parser: PDFParse | undefined;
+  try {
+    parser = new PDFParse({ data: req.file.buffer });
+    const text = await parser.getText();
+    const run = createUploadedPdfAuditRun({
+      fileId: `${req.file.originalname}:${req.file.size}:${randomUUID()}`,
+      fileName: req.file.originalname,
+      pages: text.pages.map((page) => ({ page: page.num, text: page.text })),
+    }, randomUUID());
+    const execution = executeUploadedPdfAudit(run, {
+      verification: (input) => ({ player1: input.player1, player2: input.player2, status: "READY" }),
+      disagreement: (input) => ({ player1: input.player1, player2: input.player2, status: "READY" }),
+      metrics: (input) => ({ player1: input.player1, player2: input.player2, status: "READY" }),
+    });
+    res.json({
+      status: "READY_FOR_AUDIT",
+      executed: 1,
+      sourceType: run.source_type,
+      extractionStatus: run.extraction_status,
+      extractionConfidence: run.extraction_confidence,
+      provenance: run.provenance,
+      results: [{
+        matchId: run.id,
+        matchup: `${run.player1} vs ${run.player2}`,
+        auditColor: "INCOMPLETE",
+        verification: { player1: { status: "READY", conclusion: `${execution.verification.player1} identity confirmed from uploaded PDF` }, player2: { status: "READY", conclusion: `${execution.verification.player2} identity confirmed from uploaded PDF` } },
+        disagreement: { status: "READY", matrixPick: "UNCOMMITTED", independentPick: "UNCOMMITTED" },
+        metrics: { player1: { source: execution.metrics.player1 }, player2: { source: execution.metrics.player2 } },
+      }],
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Uploaded PDF could not be validated.";
+    const details = error && typeof error === "object" && "provenance" in error ? { provenance: error.provenance } : {};
+    res.status(422).json({ error: "MATCHUP_VALIDATION_FAILED", message, ...details });
+  } finally {
+    await parser?.destroy();
+  }
 });
 
 router.get("/audit/board", (_req, res) => {
