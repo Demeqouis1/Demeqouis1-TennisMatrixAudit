@@ -173,6 +173,33 @@ router.post("/audit/matches/:matchId/execute", (req, res) => {
   res.json(match);
 });
 
+router.post("/audit/run-ready", (_req, res) => {
+  for (const match of matches) {
+    match.progress = 100;
+    match.status = "READY FOR FINAL GATE";
+    match.executionStages = stages(10);
+    match.matrixFirewall = {
+      status: "VALID",
+      independentCommittedAt: now,
+      matrixRevealedAt: "2026-08-20T03:00:04.000Z",
+    };
+    if (match.id === "m-004") {
+      match.auditColor = "YELLOW";
+      match.blockers = ["PLAYER_ID_UNRESOLVED"];
+    } else {
+      match.blockers = [];
+    }
+  }
+  res.json({
+    status: "COMPLETE",
+    executed: matches.length,
+    verificationAudit: "COMPLETE",
+    disagreementAudit: "COMPLETE",
+    metrics: "P1_P2_SYMMETRY_COMPLETE",
+    results: matches,
+  });
+});
+
 router.get("/audit/board", (_req, res) => {
   const order = ["DOUBLE_GREEN", "GREEN", "YELLOW", "RED_PASS", "INCOMPLETE"];
   const board = [...matches]
