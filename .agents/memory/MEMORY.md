@@ -1,0 +1,1 @@
+- [OpenAPI generation compatibility](api-generation-compatibility.md) — keep generated schemas compatible with the workspace's installed Zod runtime.
